@@ -12,6 +12,9 @@
 #import "GameConfig.h"
 #import "HelloWorldLayer.h"
 #import "RootViewController.h"
+#import "CompoundNew.h"
+#import "Squirrel.h"
+
 
 @implementation AppDelegate
 
@@ -111,7 +114,9 @@
 	[self removeStartupFlicker];
 	
 	// Run the intro Scene
-	[[CCDirector sharedDirector] runWithScene: [HelloWorldLayer scene]];
+	//[[CCDirector sharedDirector] runWithScene: [HelloWorldLayer scene]];
+	[[CCDirector sharedDirector] runWithScene: [CompoundNew scene]];
+	//[[CCDirector sharedDirector] runWithScene: [Squirrel scene]];
 }
 
 
