@@ -163,12 +163,18 @@ enum {
         
         boxy.SetAsBox(0.05f,1.85f);
         fd.shape = &boxy;
-        fd.density = 0.015000f;
+        /*fd.density = 0.015000f;
         fd.friction = 0.300000f;
-        fd.restitution = 0.600000f;
+        fd.restitution = 0.0f;
         fd.filter.groupIndex = int16(0);
         fd.filter.categoryBits = uint16(65535);
         fd.filter.maskBits = uint16(65535);
+         */
+        fd.density = 1.0f;
+        fd.friction = 0.4f;
+        fd.restitution = 0.1f;
+        
+        
         polygon1->CreateFixture(&fd);
 
         // Define the dynamic body.
@@ -181,13 +187,23 @@ enum {
         b2Body *circle1 = world->CreateBody(&bodyDef);
         [acorns addObject:[NSValue valueWithPointer:circle1]];
         b2CircleShape dynamicBox;
-        dynamicBox.m_radius = 18.0/PTM_RATIO;
+        //dynamicBox.m_radius = 18.0/PTM_RATIO;
+        dynamicBox.m_radius = 15.0/PTM_RATIO;
+        initVel.Set(0.000000f, 0.000000f);
+        //circle1->SetLinearVelocity(initVel);
+        //circle1->SetAngularVelocity(0.000000f);
         
         // Define the dynamic body fixture.
         fixtureDef.shape = &dynamicBox;	
-        fixtureDef.density = 1.0f;
+        /*fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.1f;
-        fixtureDef.restitution = 1.0f;
+        fixtureDef.restitution = 0.0f;*/
+        
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.1f;
+        
+        
         circle1->CreateFixture(&fixtureDef);
 
         //turns
@@ -200,9 +216,11 @@ enum {
         pos.Set(circle1->GetWorldCenter().x, circle1->GetWorldCenter().y);
        revJointDef.Initialize(polygon1, circle1, pos);
         revJointDef.collideConnected = false;
+        revJointDef.motorSpeed = 0.0f;
+        revJointDef.enableMotor = false;
+        revJointDef.maxMotorTorque = 5.0f;
         world->CreateJoint(&revJointDef);
-        
-        
+
         /*b2WeldJointDef weldJointDef;
         weldJointDef.Initialize(polygon1, circle1, pos);
         weldJointDef.collideConnected = false;
