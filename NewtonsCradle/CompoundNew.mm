@@ -94,7 +94,7 @@ enum {
         
         ground = world->CreateBody(&bd);
         
-        //Box
+    /*    //Box
         b2BodyDef groundBodyDef;
         groundBody = world->CreateBody(&groundBodyDef);
         
@@ -106,7 +106,7 @@ enum {
         groundBody->CreateFixture(&shape,0);
         shape.SetAsEdge(b2Vec2(0.000000f, 10.000000f), b2Vec2(0.000000f, 0.000000f)); //;left wall
         groundBody->CreateFixture(&shape,0);
-
+*/
         
 		//Set up sprite
         acorns = [[NSMutableArray alloc] initWithCapacity:4];
@@ -161,25 +161,22 @@ enum {
         initVel.Set(0.000000f, 0.000000f);
         polygon1->SetLinearVelocity(initVel);
         polygon1->SetAngularVelocity(0.000000f);
-        
         boxy.SetAsBox(0.05f,2.85f);
         fd.shape = &boxy;
-
-        fd.density = 1.0f;
-        //fd.friction = 0.4f;
-        fd.friction = 0.0f;
-        fd.restitution = 0.1f;
+        //fd.density = 1.0f;
+        //fd.friction = 0.0f;
+        //fd.restitution = 0.1f;
         
+        //new settings
+        fd.density = 1.0f;
+        fd.friction = 1.0f;
         
         polygon1->CreateFixture(&fd);
-
         // Define the dynamic body.
         bodyDef.type = b2_dynamicBody;
         bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -2.85f);
-        //bodyDef.position.Set(polygon1->GetWorldCenter().x, (polygon1->GetWorldCenter().y *0.5f) + acorn.contentSize.height);
-        //bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y );
         
-        
+        //acorns
         acorn = [CCSprite spriteWithFile:@"acorn.png"];
         acorn.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acorn z:1 tag:11];
@@ -188,41 +185,31 @@ enum {
         [acorns addObject:[NSValue valueWithPointer:circle1]];
         b2CircleShape dynamicBox;
         dynamicBox.m_radius = 18.0/PTM_RATIO;
-        //dynamicBox.m_radius = 15.0/PTM_RATIO;//matches acorn size        
-        // Define the dynamic body fixture.
         fixtureDef.shape = &dynamicBox;	
-
-        
-        fixtureDef.density = 1.0f;
-        //fixtureDef.friction = 0.4f;
-        fixtureDef.friction = 0.0f;
-        fixtureDef.restitution = 0.1f;
-        
+        //fixtureDef.density = 1.0f;
+        //fixtureDef.friction = 0.0f;
+        //fixtureDef.restitution = 0.1f;
+       
+        //new settings
+        fixtureDef.friction = 1;
+        fixtureDef.density = 10;
+        fixtureDef.restitution = 1;
         
         circle1->CreateFixture(&fixtureDef);
 
-        //turns
         //Revolute joints
         pos.Set(4.764226f+ (spacing*i), 9.3f);
         revJointDef.Initialize(polygon1, anchor, pos);
         revJointDef.collideConnected = false;
-        revJointDef.maxMotorTorque = 500.0f;
-
         world->CreateJoint(&revJointDef);
         
         pos.Set(circle1->GetWorldCenter().x, circle1->GetWorldCenter().y);
-       revJointDef.Initialize(polygon1, circle1, pos);
+        revJointDef.Initialize(polygon1, circle1, pos);
         revJointDef.collideConnected = false;
         revJointDef.motorSpeed = 0.0f;
         revJointDef.enableMotor = false;
         revJointDef.maxMotorTorque = 5.0f;
         world->CreateJoint(&revJointDef);
-
-        /*b2WeldJointDef weldJointDef;
-        weldJointDef.Initialize(polygon1, circle1, pos);
-        weldJointDef.collideConnected = false;
-        world->CreateJoint(&weldJointDef);
-         */
     }
 }
 
