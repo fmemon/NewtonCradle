@@ -44,12 +44,17 @@
     MyContactListener *contactListener;
     CCSprite *acornSprite;
     b2Body* groundBody;
+    
+    BOOL muted;
+    float spacing;
 }
 
 // returns a CCScene that contains the CompoundNew as the only child
 +(CCScene *) scene;
 // adds a new sprite at a given coordinate
 - (void) createEachPendulum2:(float)delta;
+- (void)reset;
+- (void)turnOnMusic;
 
 
 @end

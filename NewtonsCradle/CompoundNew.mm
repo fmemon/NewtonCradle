@@ -71,6 +71,9 @@ enum {
         self.isTouchEnabled = YES; 
         
         
+        muted = FALSE;
+        spacing = 1.14f;
+
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         CCLOG(@"Screen width %0.2f screen height %0.2f",screenSize.width,screenSize.height); 
         
@@ -146,14 +149,12 @@ enum {
     fd.friction = 0.300000f;
     fd.restitution = 0.600000f;
     anchor->CreateFixture(&fd);
-    
-   float spacing = 1.14f;
-    
+        
     for (int i=0; i<4; i++) {
         
         //sticks
         bodyDef.type=b2_dynamicBody;
-        bodyDef.position.Set(4.764226f+ (spacing*i), 6.5f);
+        bodyDef.position.Set(4.7f+ (spacing*i), 6.5f);
         bodyDef.angle = 0.000000f;
         b2Body* stick = world->CreateBody(&bodyDef);
         initVel.Set(0.000000f, 0.000000f);
@@ -192,13 +193,84 @@ enum {
         world->CreateJoint(&revJointDef);
         
         pos.Set(acorn->GetWorldCenter().x, acorn->GetWorldCenter().y);
+        
         revJointDef.Initialize(stick, acorn, pos);
         revJointDef.collideConnected = false;
         revJointDef.motorSpeed = 0.0f;
         revJointDef.enableMotor = false;
         revJointDef.maxMotorTorque = 5.0f;
         world->CreateJoint(&revJointDef);
+        
+        
+        //menuitem
+        CCLabelTTF* tapLabel = [CCLabelTTF labelWithString:@"All Rights Reserved 2012 BestWhich.com" fontName:@"Arial" fontSize:14];
+		tapLabel.position = ccp(310.0f, 30.0f);    
+        tapLabel.color = ccBLUE;
+		[self addChild: tapLabel];
+     
+        CCMenuItem *restartItem = [CCMenuItemFont itemFromString:@"restart" target:self selector:@selector(reset)];
+      /*  CCMenuItemSprite* muteItem= [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
+                                                                    selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]
+                                                                    disabledSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]
+                                                                            target:self
+                                                                          selector:@selector(turnOnMusic)];		
+        
+        
+        
+        CCMenu *menu = [CCMenu menuWithItems:muteItem, restartItem, nil]; */
+        
+        CCMenuItemSprite *playItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
+                                                             selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]];
+        
+		CCMenuItemSprite *pauseItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseOFF.png"]
+                                                              selectedSprite:[CCSprite spriteWithFile:@"newPauseOFFSelect.png"]];
+        CCMenuItemToggle *pause;
+		if (!muted)  {
+            pause = [CCMenuItemToggle itemWithTarget:self selector:@selector(turnOnMusic)items:playItem, pauseItem, nil];
+        }
+        else {
+            pause = [CCMenuItemToggle itemWithTarget:self selector:@selector(turnOnMusic)items:pauseItem, playItem, nil];
+        }
+        
+        //Create Menu with the items created before
+		CCMenu *menu = [CCMenu menuWithItems:pause,restartItem, nil];
+		[self addChild:menu z:11];
+		[menu alignItemsHorizontally];
+		[menu setPosition:ccp(90.0f, 35.0f)];
+		        
     }
+}
+
+
+- (void)reset {
+    for (int i=0; i<4; i++) {
+        bulletBody = (b2Body*)[[acorns objectAtIndex:i] pointerValue];
+        bulletBody->SetTransform(b2Vec2(4.7f+ (spacing*i), 4.0f), 0.0f);
+        bulletBody->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        bulletBody->SetAngularVelocity(0.0f);
+    }
+    
+}
+
+- (void)turnOnMusic {
+    if ([[SimpleAudioEngine sharedEngine] mute]) {
+        // This will unmute the sound
+        muted = FALSE;
+        // [[SimpleAudioEngine sharedEngine] setMute:0];
+    }
+    else {
+        //This will mute the sound
+        muted = TRUE;
+        //[[SimpleAudioEngine sharedEngine] setMute:1];
+    }
+    [[SimpleAudioEngine sharedEngine] setMute:muted];
+    //NSLog(@"in mute Siund %d", muted);
+    
+   /* 
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:muted forKey:@"IsMuted"];
+    [defaults synchronize];
+    */
 }
 
 -(void) draw
