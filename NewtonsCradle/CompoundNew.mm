@@ -72,7 +72,7 @@ enum {
         
         
         muted = FALSE;
-        spacing = 1.14f;
+        spacing = 1.63f;
 
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         CCLOG(@"Screen width %0.2f screen height %0.2f",screenSize.width,screenSize.height); 
@@ -171,14 +171,17 @@ enum {
         bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
         
         //acorns
-        acornSprite = [CCSprite spriteWithFile:@"acorn.png"];
+        //acornSprite = [CCSprite spriteWithFile:@"acorn.png"];
+        
+        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate%i.png", i+1]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
         bodyDef.userData = acornSprite;
         b2Body *acorn = world->CreateBody(&bodyDef);
         [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
-        dynamicBox.m_radius = 18.0/PTM_RATIO;
+        //dynamicBox.m_radius = 18.0/PTM_RATIO;
+        dynamicBox.m_radius = 25.71/PTM_RATIO;
         fixtureDef.shape = &dynamicBox;	
         fixtureDef.friction = 1;
         fixtureDef.density = 10;
