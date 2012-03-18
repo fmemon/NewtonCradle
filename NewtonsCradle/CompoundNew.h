@@ -50,6 +50,8 @@
     b2RevoluteJoint *armJoint;
     b2WeldJoint *bulletJoint;
     b2MouseJoint *_mouseJoint;
+    b2MouseJointDef md;
+
 }
 
 // returns a CCScene that contains the CompoundNew as the only child
@@ -58,7 +60,7 @@
 //- (void)rubeGoldberg;
 //- (void)rubeGoldberg2;
 - (void)rubeGoldberg3;
-- (void) createEachPendulum:(float)delta;
+//- (void) createEachPendulum:(float)delta;
 - (void) createEachPendulum2:(float)delta;
 
 

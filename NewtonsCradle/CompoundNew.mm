@@ -159,16 +159,13 @@ enum {
     fd.filter.maskBits = uint16(65535);
     circle2->CreateFixture(&fd);
     
-    //[self createEachPendulum:10.0f];
     [self createEachPendulum2:10.0f];
-    //[self addNewSpriteWithCoords:CGPointMake(240.0f, 240.0f)];
 
 }
 
 - (void) createEachPendulum2:(float)delta {
     
     float spacing = 1.0f;
-    CGSize screenSize = [CCDirector sharedDirector].winSize;
     
     for (int i=0; i<4; i++) {
         
@@ -190,7 +187,7 @@ enum {
         fd.filter.maskBits = uint16(65535);
         polygon1->CreateFixture(&fd);
 
-        //Circles
+    /*    //Circles
         bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
         bodyDef.angle = 0.000000f;
         b2Body* circle1 = world->CreateBody(&bodyDef);
@@ -206,88 +203,17 @@ enum {
         fd.filter.categoryBits = uint16(65535);
         fd.filter.maskBits = uint16(65535);
         circle1->CreateFixture(&fd);
+     
+     [anchors addObject:[NSValue valueWithPointer:polygon1]];
 
-        
-        //turns
-        //Revolute joints
-        pos.Set(4.764226f+ (spacing*i), 9.320508f);
-        revJointDef.Initialize(polygon1, ground, pos);
-        revJointDef.collideConnected = false;
-        world->CreateJoint(&revJointDef);
-        
-        pos.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f - 1.65f*0.5f);
-        revJointDef.Initialize(polygon1, circle1, pos);
-        revJointDef.collideConnected = false;
-        world->CreateJoint(&revJointDef);
-        
-    }
-    /*
-    
-    bodyDef.position.Set(4.764226f, 7.320508f);
-    bodyDef.angle = 0.000000f;
-    b2Body* polygon1 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    polygon1->SetLinearVelocity(initVel);
-    polygon1->SetAngularVelocity(0.000000f);
-    
-    boxy.SetAsBox(0.05f,1.65f);
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon1->CreateFixture(&fd);
-    
-    //Circles
-    bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
-    bodyDef.angle = 0.000000f;
-    b2Body* circle1 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    circle1->SetLinearVelocity(initVel);
-    circle1->SetAngularVelocity(0.000000f);
-    circleShape.m_radius = 0.406489f;
-    fd.shape = &circleShape;
-    fd.density = 0.196374f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    circle1->CreateFixture(&fd);
-    
-    
-    //Revolute joints
-    pos.Set(4.764226f, 9.320508f);
-    revJointDef.Initialize(polygon1, ground, pos);
-    revJointDef.collideConnected = false;
-    world->CreateJoint(&revJointDef);
-    
-    pos.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f - 1.65f*0.5f);
-    revJointDef.Initialize(polygon1, circle1, pos);
-    revJointDef.collideConnected = false;
-    world->CreateJoint(&revJointDef);
-     */
-}
-
-
--(void) addNewSpriteWithCoords:(CGPoint)p
-{
-    CGSize screenSize = [CCDirector sharedDirector].winSize;
-    
-    for (int i=0; i<4; i++) {
-        
-        p = CGPointMake(120.0f + (40*i), p.y);
-        b2BodyDef anchorBodyDef;
-        anchorBodyDef.position.Set(p.x/PTM_RATIO,screenSize.height/PTM_RATIO*0.9f); //center body on screen
-        world->CreateBody(&anchorBodyDef);
-        
+*/
+        // Define the dynamic body.
+        //Set up a 1m squared box in the physics world
         bodyDef.type = b2_dynamicBody;
         
-        bodyDef.position.Set(p.x/PTM_RATIO, p.y/PTM_RATIO);
-        b2Body *body = world->CreateBody(&bodyDef);
-        //[anchors addObject:[NSValue valueWithPointer:body]];
+        bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
+        b2Body *circle1 = world->CreateBody(&bodyDef);
+        [anchors addObject:[NSValue valueWithPointer:circle1]];
         
         // Define another box shape for our dynamic body.
         //b2PolygonShape dynamicBox;
@@ -301,55 +227,12 @@ enum {
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0.1f;
         fixtureDef.restitution = 1.0f;
-        body->CreateFixture(&fixtureDef);
-
-
-    }
-}
-
-
-- (void) createEachPendulum:(float)delta {
-    
-    float spacing = 1.5f;
-    for (int i = 0; i < 2; i++) {
-        //polygon1
-        bodyDef.position.Set(4.764226f + i*spacing, 7.320508f);
-        bodyDef.angle = 0.000000f;
-        b2Body* polygon1 = world->CreateBody(&bodyDef);
-        initVel.Set(0.000000f, 0.000000f);
-        polygon1->SetLinearVelocity(initVel);
-        polygon1->SetAngularVelocity(0.000000f);
+        circle1->CreateFixture(&fixtureDef);
         
-        boxy.SetAsBox(0.05f,1.65f);
-        fd.shape = &boxy;
-        fd.density = 0.015000f;
-        fd.friction = 0.300000f;
-        fd.restitution = 0.600000f;
-        fd.filter.groupIndex = int16(0);
-        fd.filter.categoryBits = uint16(65535);
-        fd.filter.maskBits = uint16(65535);
-        polygon1->CreateFixture(&fd);
-        
-        //Circles
-        bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
-        bodyDef.angle = 0.000000f;
-        b2Body* circle1 = world->CreateBody(&bodyDef);
-        initVel.Set(0.000000f, 0.000000f);
-        circle1->SetLinearVelocity(initVel);
-        circle1->SetAngularVelocity(0.000000f);
-        circleShape.m_radius = 0.406489f;
-        fd.shape = &circleShape;
-        fd.density = 0.196374f;
-        fd.friction = 0.300000f;
-        fd.restitution = 0.600000f;
-        fd.filter.groupIndex = int16(0);
-        fd.filter.categoryBits = uint16(65535);
-        fd.filter.maskBits = uint16(65535);
-        circle1->CreateFixture(&fd);
-        
-        
+
+        //turns
         //Revolute joints
-        pos.Set(4.764226f, 9.320508f+i*spacing);
+        pos.Set(4.764226f+ (spacing*i), 9.320508f);
         revJointDef.Initialize(polygon1, ground, pos);
         revJointDef.collideConnected = false;
         world->CreateJoint(&revJointDef);
@@ -360,368 +243,7 @@ enum {
         world->CreateJoint(&revJointDef);
         
     }
-
-
 }
-/*
-- (void)rubeGoldberg2 {
-    
-    //Polygons
-    
-    //polygon1
-    bodyDef.position.Set(4.764226f, 7.320508f);
-    bodyDef.angle = 0.000000f;
-    b2Body* polygon1 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    polygon1->SetLinearVelocity(initVel);
-    polygon1->SetAngularVelocity(0.000000f);
-    b2PolygonShape boxy;
-    boxy.SetAsBox(1.65f, 0.35f);
-    
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon1->CreateFixture(&fd);
-    
-    boxy.SetAsBox(0.35f,1.65f);
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon1->CreateFixture(&fd);
-    
-    
-    //polygon2
-    bodyDef.position.Set(1.779086f, 5.100423f);
-    bodyDef.angle = 0.000000f;
-    b2Body* polygon2 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    polygon2->SetLinearVelocity(initVel);
-    polygon2->SetAngularVelocity(0.000000f);
-    //b2PolygonShape boxy;
-    boxy.SetAsBox(1.65f, 0.35f);
-    
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon2->CreateFixture(&fd);
-    
-    boxy.SetAsBox(0.35f,1.65f);
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon2->CreateFixture(&fd);    
-    
-    
-    //staticBody1
-    bodyDef1.position.Set(1.379107f, 8.495184f);
-    bodyDef1.angle = -0.222508f;
-    b2Body* staticBody1 = world->CreateBody(&bodyDef1);
-    initVel.Set(0.000000f, 0.000000f);
-    staticBody1->SetLinearVelocity(initVel);
-    staticBody1->SetAngularVelocity(0.000000f);
-    boxy.SetAsBox(1.35f, 0.20f);
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);        
-    staticBody1->CreateFixture(&boxy,0);
-    
-    //staticBody2
-    
-    bodyDef1.position.Set(5.946951f, 2.903825f);
-    bodyDef1.angle = -0.025254f;
-    b2Body* staticBody2 = world->CreateBody(&bodyDef1);
-    initVel.Set(0.000000f, 0.000000f);
-    staticBody2->SetLinearVelocity(initVel);
-    staticBody2->SetAngularVelocity(0.000000f);
-    b2Vec2 staticBody2_vertices[4];
-    staticBody2_vertices[0].Set(-3.053178f, -0.361702f);
-    staticBody2_vertices[1].Set(3.053178f, -0.361702f);
-    staticBody2_vertices[2].Set(3.053178f, 0.361702f);
-    staticBody2_vertices[3].Set(-3.053178f, 0.361702f);
-    shape.Set(staticBody2_vertices, 4);
-    fd.shape = &shape;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    staticBody2->CreateFixture(&shape,0);
-
-    //Circles
-    bodyDef.position.Set(0.468085f, 9.574468f);
-    bodyDef.angle = 0.000000f;
-    
-    b2Body* circle1 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    circle1->SetLinearVelocity(initVel);
-    circle1->SetAngularVelocity(0.000000f);
-    circleShape.m_radius = 0.406489f;
-    fd.shape = &circleShape;
-    fd.density = 0.196374f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    circle1->CreateFixture(&fd);
-    
-
-    //Revolute joints
-    
-    pos.Set(4.764226f, 7.320508f);
-    revJointDef.Initialize(polygon1, ground, pos);
-    revJointDef.collideConnected = false;
-    world->CreateJoint(&revJointDef);
-    pos.Set(1.779086f, 5.100423f);
-    revJointDef.Initialize(polygon2, ground, pos);
-    revJointDef.collideConnected = false;
-    world->CreateJoint(&revJointDef); 
-
-}
-
-- (void)rubeGoldberg {
-    
-    //Polygons
-    
-    //polygon1
-    bodyDef.position.Set(4.764226f, 7.320508f);
-    bodyDef.angle = 0.000000f;
-    b2Body* polygon1 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    polygon1->SetLinearVelocity(initVel);
-    polygon1->SetAngularVelocity(0.000000f);
-    b2PolygonShape boxy;
-    boxy.SetAsBox(1.65f, 0.35f);
-    
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon1->CreateFixture(&fd);
-    
-    boxy.SetAsBox(0.35f,1.65f);
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon1->CreateFixture(&fd);
-    
-    
-    //polygon2
-    bodyDef.position.Set(1.779086f, 5.100423f);
-    bodyDef.angle = 0.000000f;
-    b2Body* polygon2 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    polygon2->SetLinearVelocity(initVel);
-    polygon2->SetAngularVelocity(0.000000f);
-    //b2PolygonShape boxy;
-    boxy.SetAsBox(1.65f, 0.35f);
-    
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon2->CreateFixture(&fd);
-    
-    boxy.SetAsBox(0.35f,1.65f);
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    polygon2->CreateFixture(&fd);    
-    
-    
-    //staticBody1
-    bodyDef1.position.Set(1.379107f, 8.495184f);
-    bodyDef1.angle = -0.222508f;
-    b2Body* staticBody1 = world->CreateBody(&bodyDef1);
-    initVel.Set(0.000000f, 0.000000f);
-    staticBody1->SetLinearVelocity(initVel);
-    staticBody1->SetAngularVelocity(0.000000f);
-    boxy.SetAsBox(1.35f, 0.20f);
-    fd.shape = &boxy;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);        
-    staticBody1->CreateFixture(&boxy,0);
-    
-    //staticBody2
-    
-    bodyDef1.position.Set(5.946951f, 2.903825f);
-    bodyDef1.angle = -0.025254f;
-    b2Body* staticBody2 = world->CreateBody(&bodyDef1);
-    initVel.Set(0.000000f, 0.000000f);
-    staticBody2->SetLinearVelocity(initVel);
-    staticBody2->SetAngularVelocity(0.000000f);
-    b2Vec2 staticBody2_vertices[4];
-    staticBody2_vertices[0].Set(-3.053178f, -0.361702f);
-    staticBody2_vertices[1].Set(3.053178f, -0.361702f);
-    staticBody2_vertices[2].Set(3.053178f, 0.361702f);
-    staticBody2_vertices[3].Set(-3.053178f, 0.361702f);
-    shape.Set(staticBody2_vertices, 4);
-    fd.shape = &shape;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    staticBody2->CreateFixture(&shape,0);
-    
-    //staticBody3
-    bodyDef1.position.Set(8.670213f, 1.212766f);
-    bodyDef1.angle = -0.507438f;
-    b2Body* staticBody3 = world->CreateBody(&bodyDef1);
-    initVel.Set(0.000000f, 0.000000f);
-    staticBody3->SetLinearVelocity(initVel);
-    staticBody3->SetAngularVelocity(0.000000f);
-    b2Vec2 staticBody3_vertices[4];
-    staticBody3_vertices[0].Set(-1.521277f, -0.382979f);
-    staticBody3_vertices[1].Set(1.521277f, -0.382979f);
-    staticBody3_vertices[2].Set(1.521277f, 0.382979f);
-    staticBody3_vertices[3].Set(-1.521277f, 0.382979f);
-    shape.Set(staticBody3_vertices, 4);
-    fd.shape = &shape;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    staticBody3->CreateFixture(&shape,0);
-    
-    //staticBody4
-    bodyDef1.position.Set(11.574468f, 2.851064f);
-    bodyDef1.angle = 0.020196f;
-    b2Body* staticBody4 = world->CreateBody(&bodyDef1);
-    initVel.Set(0.000000f, 0.000000f);
-    staticBody4->SetLinearVelocity(initVel);
-    staticBody4->SetAngularVelocity(0.000000f);
-    b2Vec2 staticBody4_vertices[4];
-    staticBody4_vertices[0].Set(-1.723404f, -0.404255f);
-    staticBody4_vertices[1].Set(1.723404f, -0.404255f);
-    staticBody4_vertices[2].Set(1.723404f, 0.404255f);
-    staticBody4_vertices[3].Set(-1.723404f, 0.404255f);
-    shape.Set(staticBody4_vertices, 4);
-    fd.shape = &shape;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    staticBody4->CreateFixture(&shape,0);
-    
-    //block
-    bodyDef.position.Set(11.914894f, 0.882979f);
-    bodyDef.angle = 0.000000f;
-    
-    // bodyDef.userData=blockSprite;
-    b2Body* block = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    block->SetLinearVelocity(initVel);
-    block->SetAngularVelocity(0.000000f);
-    b2Vec2 block_vertices[4];
-    block_vertices[0].Set(-0.851064f, -0.840426f);
-    block_vertices[1].Set(0.851064f, -0.840426f);
-    block_vertices[2].Set(0.851064f, 0.840426f);
-    block_vertices[3].Set(-0.851064f, 0.840426f);
-    shape.Set(block_vertices, 4);
-    fd.shape = &shape;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    block->CreateFixture(&fd);
-    
-    //Circles
-    bodyDef.position.Set(0.468085f, 9.574468f);
-    bodyDef.angle = 0.000000f;
-    
-    b2Body* circle1 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    circle1->SetLinearVelocity(initVel);
-    circle1->SetAngularVelocity(0.000000f);
-    circleShape.m_radius = 0.406489f;
-    fd.shape = &circleShape;
-    fd.density = 0.196374f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    circle1->CreateFixture(&fd);
-    
-    
-    //circle2
-    bodyDef.position.Set(9.361702f, 4.276596f);
-    bodyDef.angle = 0.000000f;
-    b2Body* circle2 = world->CreateBody(&bodyDef);
-    initVel.Set(0.000000f, 0.000000f);
-    circle2->SetLinearVelocity(initVel);
-    circle2->SetAngularVelocity(0.000000f);
-    circleShape.m_radius = 1.175038f;
-    fd.shape = &circleShape;
-    fd.density = 0.015000f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    circle2->CreateFixture(&fd);
-    
-    
-    //Revolute joints
-    
-    pos.Set(4.764226f, 7.320508f);
-    revJointDef.Initialize(polygon1, ground, pos);
-    revJointDef.collideConnected = false;
-    world->CreateJoint(&revJointDef);
-    pos.Set(1.779086f, 5.100423f);
-    revJointDef.Initialize(polygon2, ground, pos);
-    revJointDef.collideConnected = false;
-    world->CreateJoint(&revJointDef); 
-
-}
-*/
 
 -(void) draw
 {
@@ -781,13 +303,12 @@ enum {
     bulletBody = (b2Body*)[[anchors objectAtIndex:0] pointerValue];
     bulletBody2 = (b2Body*)[[anchors lastObject] pointerValue];
   	//CCLOG(@"Body2bulletBody2bulletBody2 %0.2f x %02.f",bulletBody2->GetWorldCenter().x , bulletBody2->GetWorldCenter().y);
-  	//CCLOG(@"11111111111111111111111 %0.2f x %02.f",bulletBody->GetWorldCenter().x , bulletBody2->GetWorldCenter().y);
+  	//CCLOG(@"11111111111111111111111 %0.2f x %02.f",bulletBody->GetWorldCenter().x , bulletBody->GetWorldCenter().y);
     
     
     if (locationWorld.x > bulletBody2->GetWorldCenter().x - 50.0/PTM_RATIO)
     {
-        b2MouseJointDef md;
-        md.bodyA = groundBody;
+        md.bodyA = ground;
         md.bodyB = bulletBody2;
         md.target = locationWorld;
         md.maxForce = 2000;
@@ -795,8 +316,7 @@ enum {
         mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
     } else if (locationWorld.x < bulletBody->GetWorldCenter().x + 50.0/PTM_RATIO)
     {
-        b2MouseJointDef md;
-        md.bodyA = groundBody;
+        md.bodyA = ground;
         md.bodyB = bulletBody;
         md.target = locationWorld;
         md.maxForce = 2000;
