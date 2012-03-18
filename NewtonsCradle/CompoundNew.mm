@@ -93,11 +93,10 @@ enum {
         m_debugDraw->SetFlags(flags);  
         
         ground = world->CreateBody(&bd);
-        bodyDef.type=b2_dynamicBody;
         
         //Box
         b2BodyDef groundBodyDef;
-        b2Body* groundBody = world->CreateBody(&groundBodyDef);
+        groundBody = world->CreateBody(&groundBodyDef);
         
         shape.SetAsEdge(b2Vec2(0.000000f, 0.000000f), b2Vec2(15.000000f, 0.000000f)); //bottom wall
         groundBody->CreateFixture(&shape,0);
@@ -110,10 +109,8 @@ enum {
 
         
 		//Set up sprite
-        anchors = [[NSMutableArray alloc] initWithCapacity:4];
-        acorn = [CCSprite spriteWithFile:@"acorn.png"];
-        acorn.position = ccp(screenSize.width/2, 50/PTM_RATIO);
-        [self addChild:acorn z:1 tag:11];
+        acorns = [[NSMutableArray alloc] initWithCapacity:4];
+
         // Preload effect
         [MusicHandler preload];
         
@@ -124,7 +121,6 @@ enum {
         
         [self createEachPendulum2:10.0f];
 
-        //[self rubeGoldberg3];
 
         [self schedule: @selector(tick:)]; 
     }
@@ -133,56 +129,31 @@ enum {
     
 }
 
-- (void)rubeGoldberg3 {
 
-    //staticBody1
-    bodyDef1.position.Set(1.379107f, 8.495184f);
-    bodyDef1.angle = -0.222508f;
-    b2Body* staticBody1 = world->CreateBody(&bodyDef1);
-    initVel.Set(0.000000f, 0.000000f);
-    staticBody1->SetLinearVelocity(initVel);
-    staticBody1->SetAngularVelocity(0.000000f);
-    boxy.SetAsBox(1.35f, 0.20f);
+- (void) createEachPendulum2:(float)delta {
+    
+    
+    
+    //top anchor
+    bodyDef.type = b2_staticBody;
+    bodyDef.position.Set(7.764226f, 360/PTM_RATIO *0.83f);
+    bodyDef.type = b2_staticBody;
+    bodyDef.angle = 0.000000f;
+    b2Body* anchor = world->CreateBody(&bodyDef);
+    boxy.SetAsBox(4.65f, 0.25f);
     fd.shape = &boxy;
     fd.density = 0.015000f;
     fd.friction = 0.300000f;
     fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);        
-    staticBody1->CreateFixture(&boxy,0);
-    
-    //Circles
-    //Big Ball
-    bodyDef.position.Set(0.468085f, 9.574468f);
-    bodyDef.angle = 0.000000f;
-    b2Body* circle2 = world->CreateBody(&bodyDef);
-    [anchors addObject:[NSValue valueWithPointer:circle2]];
-
-    initVel.Set(0.000000f, 0.000000f);
-    circle2->SetLinearVelocity(initVel);
-    circle2->SetAngularVelocity(0.000000f);
-    circleShape.m_radius = 0.75f;
-    fd.shape = &circleShape;
-    fd.density = 1.0f;
-    fd.friction = 0.300000f;
-    fd.restitution = 0.600000f;
-    fd.filter.groupIndex = int16(0);
-    fd.filter.categoryBits = uint16(65535);
-    fd.filter.maskBits = uint16(65535);
-    circle2->CreateFixture(&fd);
-    
-    [self createEachPendulum2:10.0f];
-
-}
-
-- (void) createEachPendulum2:(float)delta {
+    anchor->CreateFixture(&fd);
     
     float spacing = 1.5f;
     
     for (int i=0; i<4; i++) {
         
         //sticks
+        bodyDef.type=b2_dynamicBody;
+
         bodyDef.position.Set(4.764226f+ (spacing*i), 7.320508f);
         bodyDef.angle = 0.000000f;
         b2Body* polygon1 = world->CreateBody(&bodyDef);
@@ -190,7 +161,7 @@ enum {
         polygon1->SetLinearVelocity(initVel);
         polygon1->SetAngularVelocity(0.000000f);
         
-        boxy.SetAsBox(0.05f,1.65f);
+        boxy.SetAsBox(0.05f,1.85f);
         fd.shape = &boxy;
         fd.density = 0.015000f;
         fd.friction = 0.300000f;
@@ -203,9 +174,12 @@ enum {
         // Define the dynamic body.
         bodyDef.type = b2_dynamicBody;
         bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
+        acorn = [CCSprite spriteWithFile:@"acorn.png"];
+        acorn.position = ccp(480.0f/2, 50/PTM_RATIO);
+        [self addChild:acorn z:1 tag:11];
         bodyDef.userData = acorn;
         b2Body *circle1 = world->CreateBody(&bodyDef);
-        [anchors addObject:[NSValue valueWithPointer:circle1]];
+        [acorns addObject:[NSValue valueWithPointer:circle1]];
         b2CircleShape dynamicBox;
         dynamicBox.m_radius = 18.0/PTM_RATIO;
         
@@ -219,15 +193,21 @@ enum {
         //turns
         //Revolute joints
         pos.Set(4.764226f+ (spacing*i), 9.320508f);
-        revJointDef.Initialize(polygon1, ground, pos);
+        revJointDef.Initialize(polygon1, anchor, pos);
         revJointDef.collideConnected = false;
         world->CreateJoint(&revJointDef);
         
-       // pos.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f - 1.65f*0.5f);
         pos.Set(circle1->GetWorldCenter().x, circle1->GetWorldCenter().y);
-        revJointDef.Initialize(polygon1, circle1, pos);
+       revJointDef.Initialize(polygon1, circle1, pos);
         revJointDef.collideConnected = false;
         world->CreateJoint(&revJointDef);
+        
+        
+        /*b2WeldJointDef weldJointDef;
+        weldJointDef.Initialize(polygon1, circle1, pos);
+        weldJointDef.collideConnected = false;
+        world->CreateJoint(&weldJointDef);
+         */
     }
 }
 
@@ -274,10 +254,7 @@ enum {
 			myActor.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
 		}	
 	}
-    
-    
-    
-    
+
     // Loop through all of the box2d bodies that are currently colliding, that we have
     // gathered with our custom contact listener...
     std::vector<MyContact>::iterator pos2;
@@ -287,14 +264,18 @@ enum {
         // Get the box2d bodies for each object
         b2Body *bodyA = contact.fixtureA->GetBody();
         b2Body *bodyB = contact.fixtureB->GetBody();
-        //[[SimpleAudioEngine sharedEngine] playEffect: @"wood.wav"];
-       [MusicHandler playBounce];
+        if (bodyA->GetUserData() != NULL && bodyB->GetUserData() != NULL) {
+            CCSprite *spriteA = (CCSprite *) bodyA->GetUserData();
+            CCSprite *spriteB = (CCSprite *) bodyB->GetUserData();
+            
+            // Is sprite A a cat and sprite B a car? 
+            if (spriteA.tag == 11 && spriteB.tag == 11) {
+                [MusicHandler playBounce];
+            } 
+        }  
+
     }
-
-    
-    
 }
-
 
 - (void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -305,8 +286,8 @@ enum {
     location = [[CCDirector sharedDirector] convertToGL:location];
     b2Vec2 locationWorld = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
     
-    bulletBody = (b2Body*)[[anchors objectAtIndex:0] pointerValue];
-    bulletBody2 = (b2Body*)[[anchors lastObject] pointerValue];
+    bulletBody = (b2Body*)[[acorns objectAtIndex:0] pointerValue];
+    bulletBody2 = (b2Body*)[[acorns lastObject] pointerValue];
   	//CCLOG(@"Body2bulletBody2bulletBody2 %0.2f x %02.f",bulletBody2->GetWorldCenter().x , bulletBody2->GetWorldCenter().y);
   	//CCLOG(@"11111111111111111111111 %0.2f x %02.f",bulletBody->GetWorldCenter().x , bulletBody->GetWorldCenter().y);
     
@@ -382,6 +363,10 @@ enum {
 	world = NULL;
 	
 	delete m_debugDraw;
+    
+    world->DestroyJoint(mouseJoint);
+    
+    mouseJoint = NULL;
     
 	// don't forget to call "super dealloc"
 	[super dealloc];
