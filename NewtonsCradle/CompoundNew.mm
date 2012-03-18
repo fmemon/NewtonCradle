@@ -94,7 +94,7 @@ enum {
         
         ground = world->CreateBody(&bd);
         
-    /*    //Box
+        //Box
         b2BodyDef groundBodyDef;
         groundBody = world->CreateBody(&groundBodyDef);
         
@@ -106,7 +106,7 @@ enum {
         groundBody->CreateFixture(&shape,0);
         shape.SetAsEdge(b2Vec2(0.000000f, 10.000000f), b2Vec2(0.000000f, 0.000000f)); //;left wall
         groundBody->CreateFixture(&shape,0);
-*/
+
         
 		//Set up sprite
         acorns = [[NSMutableArray alloc] initWithCapacity:4];
@@ -169,7 +169,7 @@ enum {
         
         //new settings
         fd.density = 1.0f;
-        fd.friction = 1.0f;
+        fd.friction = 0.0f;
         
         polygon1->CreateFixture(&fd);
         // Define the dynamic body.
@@ -201,6 +201,9 @@ enum {
         pos.Set(4.764226f+ (spacing*i), 9.3f);
         revJointDef.Initialize(polygon1, anchor, pos);
         revJointDef.collideConnected = false;
+        //revJointDef.enableLimit = true;
+        //revJointDef.lowerAngle  = CC_DEGREES_TO_RADIANS(9);
+        //revJointDef.upperAngle  = CC_DEGREES_TO_RADIANS(75);
         world->CreateJoint(&revJointDef);
         
         pos.Set(circle1->GetWorldCenter().x, circle1->GetWorldCenter().y);
