@@ -147,13 +147,12 @@ enum {
     fd.restitution = 0.600000f;
     anchor->CreateFixture(&fd);
     
-    float spacing = 1.5f;
+    float spacing = 1.13f;
     
     for (int i=0; i<4; i++) {
         
         //sticks
         bodyDef.type=b2_dynamicBody;
-
         bodyDef.position.Set(4.764226f+ (spacing*i), 7.320508f);
         bodyDef.angle = 0.000000f;
         b2Body* polygon1 = world->CreateBody(&bodyDef);
@@ -163,15 +162,10 @@ enum {
         
         boxy.SetAsBox(0.05f,1.85f);
         fd.shape = &boxy;
-        /*fd.density = 0.015000f;
-        fd.friction = 0.300000f;
-        fd.restitution = 0.0f;
-        fd.filter.groupIndex = int16(0);
-        fd.filter.categoryBits = uint16(65535);
-        fd.filter.maskBits = uint16(65535);
-         */
+
         fd.density = 1.0f;
-        fd.friction = 0.4f;
+        //fd.friction = 0.4f;
+        fd.friction = 0.1f;
         fd.restitution = 0.1f;
         
         
@@ -180,6 +174,10 @@ enum {
         // Define the dynamic body.
         bodyDef.type = b2_dynamicBody;
         bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
+        //bodyDef.position.Set(polygon1->GetWorldCenter().x, (polygon1->GetWorldCenter().y *0.5f) + acorn.contentSize.height);
+        //bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y );
+        
+        
         acorn = [CCSprite spriteWithFile:@"acorn.png"];
         acorn.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acorn z:1 tag:11];
@@ -187,20 +185,15 @@ enum {
         b2Body *circle1 = world->CreateBody(&bodyDef);
         [acorns addObject:[NSValue valueWithPointer:circle1]];
         b2CircleShape dynamicBox;
-        //dynamicBox.m_radius = 18.0/PTM_RATIO;
-        dynamicBox.m_radius = 15.0/PTM_RATIO;
-        initVel.Set(0.000000f, 0.000000f);
-        //circle1->SetLinearVelocity(initVel);
-        //circle1->SetAngularVelocity(0.000000f);
-        
+        dynamicBox.m_radius = 18.0/PTM_RATIO;
+        //dynamicBox.m_radius = 15.0/PTM_RATIO;//matches acorn size        
         // Define the dynamic body fixture.
         fixtureDef.shape = &dynamicBox;	
-        /*fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.1f;
-        fixtureDef.restitution = 0.0f;*/
+
         
         fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.4f;
+        //fixtureDef.friction = 0.4f;
+        fixtureDef.friction = 0.1f;
         fixtureDef.restitution = 0.1f;
         
         
@@ -288,7 +281,7 @@ enum {
             
             // Is sprite A a cat and sprite B a car? 
             if (spriteA.tag == 11 && spriteB.tag == 11) {
-                [MusicHandler playBounce];
+                //[MusicHandler playBounce];
             } 
         }  
 
