@@ -147,25 +147,27 @@ enum {
     fd.restitution = 0.600000f;
     anchor->CreateFixture(&fd);
     
-    float spacing = 1.13f;
+   float spacing = 1.14f;
+    //float spacing = 2*18.0/PTM_RATIO;
+
     
     for (int i=0; i<4; i++) {
         
         //sticks
         bodyDef.type=b2_dynamicBody;
-        bodyDef.position.Set(4.764226f+ (spacing*i), 7.320508f);
+        bodyDef.position.Set(4.764226f+ (spacing*i), 6.5f);
         bodyDef.angle = 0.000000f;
         b2Body* polygon1 = world->CreateBody(&bodyDef);
         initVel.Set(0.000000f, 0.000000f);
         polygon1->SetLinearVelocity(initVel);
         polygon1->SetAngularVelocity(0.000000f);
         
-        boxy.SetAsBox(0.05f,1.85f);
+        boxy.SetAsBox(0.05f,2.85f);
         fd.shape = &boxy;
 
         fd.density = 1.0f;
         //fd.friction = 0.4f;
-        fd.friction = 0.1f;
+        fd.friction = 0.0f;
         fd.restitution = 0.1f;
         
         
@@ -173,7 +175,7 @@ enum {
 
         // Define the dynamic body.
         bodyDef.type = b2_dynamicBody;
-        bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
+        bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -2.85f);
         //bodyDef.position.Set(polygon1->GetWorldCenter().x, (polygon1->GetWorldCenter().y *0.5f) + acorn.contentSize.height);
         //bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y );
         
@@ -193,7 +195,7 @@ enum {
         
         fixtureDef.density = 1.0f;
         //fixtureDef.friction = 0.4f;
-        fixtureDef.friction = 0.1f;
+        fixtureDef.friction = 0.0f;
         fixtureDef.restitution = 0.1f;
         
         
@@ -201,9 +203,11 @@ enum {
 
         //turns
         //Revolute joints
-        pos.Set(4.764226f+ (spacing*i), 9.320508f);
+        pos.Set(4.764226f+ (spacing*i), 9.3f);
         revJointDef.Initialize(polygon1, anchor, pos);
         revJointDef.collideConnected = false;
+        revJointDef.maxMotorTorque = 500.0f;
+
         world->CreateJoint(&revJointDef);
         
         pos.Set(circle1->GetWorldCenter().x, circle1->GetWorldCenter().y);
