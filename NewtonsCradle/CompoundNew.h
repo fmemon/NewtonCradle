@@ -42,7 +42,7 @@
     b2MouseJointDef md;
     
     MyContactListener *contactListener;
-    CCSprite *acorn;
+    CCSprite *acornSprite;
     b2Body* groundBody;
 }
 

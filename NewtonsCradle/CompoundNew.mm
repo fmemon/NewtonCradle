@@ -148,8 +148,6 @@ enum {
     anchor->CreateFixture(&fd);
     
    float spacing = 1.14f;
-    //float spacing = 2*18.0/PTM_RATIO;
-
     
     for (int i=0; i<4; i++) {
         
@@ -157,57 +155,44 @@ enum {
         bodyDef.type=b2_dynamicBody;
         bodyDef.position.Set(4.764226f+ (spacing*i), 6.5f);
         bodyDef.angle = 0.000000f;
-        b2Body* polygon1 = world->CreateBody(&bodyDef);
+        b2Body* stick = world->CreateBody(&bodyDef);
         initVel.Set(0.000000f, 0.000000f);
-        polygon1->SetLinearVelocity(initVel);
-        polygon1->SetAngularVelocity(0.000000f);
+        stick->SetLinearVelocity(initVel);
+        stick->SetAngularVelocity(0.000000f);
         boxy.SetAsBox(0.05f,2.85f);
-        fd.shape = &boxy;
-        //fd.density = 1.0f;
-        //fd.friction = 0.0f;
-        //fd.restitution = 0.1f;
-        
-        //new settings
+        fd.shape = &boxy;        
         fd.density = 1.0f;
         fd.friction = 0.0f;
         
-        polygon1->CreateFixture(&fd);
+        stick->CreateFixture(&fd);
         // Define the dynamic body.
         bodyDef.type = b2_dynamicBody;
-        bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -2.85f);
+        bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
         
         //acorns
-        acorn = [CCSprite spriteWithFile:@"acorn.png"];
-        acorn.position = ccp(480.0f/2, 50/PTM_RATIO);
-        [self addChild:acorn z:1 tag:11];
-        bodyDef.userData = acorn;
-        b2Body *circle1 = world->CreateBody(&bodyDef);
-        [acorns addObject:[NSValue valueWithPointer:circle1]];
+        acornSprite = [CCSprite spriteWithFile:@"acorn.png"];
+        acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
+        [self addChild:acornSprite z:1 tag:11];
+        bodyDef.userData = acornSprite;
+        b2Body *acorn = world->CreateBody(&bodyDef);
+        [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
         dynamicBox.m_radius = 18.0/PTM_RATIO;
         fixtureDef.shape = &dynamicBox;	
-        //fixtureDef.density = 1.0f;
-        //fixtureDef.friction = 0.0f;
-        //fixtureDef.restitution = 0.1f;
-       
-        //new settings
         fixtureDef.friction = 1;
         fixtureDef.density = 10;
         fixtureDef.restitution = 1;
         
-        circle1->CreateFixture(&fixtureDef);
+        acorn->CreateFixture(&fixtureDef);
 
         //Revolute joints
         pos.Set(4.764226f+ (spacing*i), 9.3f);
-        revJointDef.Initialize(polygon1, anchor, pos);
+        revJointDef.Initialize(stick, anchor, pos);
         revJointDef.collideConnected = false;
-        //revJointDef.enableLimit = true;
-        //revJointDef.lowerAngle  = CC_DEGREES_TO_RADIANS(9);
-        //revJointDef.upperAngle  = CC_DEGREES_TO_RADIANS(75);
         world->CreateJoint(&revJointDef);
         
-        pos.Set(circle1->GetWorldCenter().x, circle1->GetWorldCenter().y);
-        revJointDef.Initialize(polygon1, circle1, pos);
+        pos.Set(acorn->GetWorldCenter().x, acorn->GetWorldCenter().y);
+        revJointDef.Initialize(stick, acorn, pos);
         revJointDef.collideConnected = false;
         revJointDef.motorSpeed = 0.0f;
         revJointDef.enableMotor = false;
