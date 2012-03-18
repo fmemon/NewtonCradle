@@ -159,6 +159,10 @@
 		650995C61514E27A00123406 /* HelloWorldLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 650995C51514E27A00123406 /* HelloWorldLayer.mm */; };
 		650995C91514E27A00123406 /* GLES-Render.mm in Sources */ = {isa = PBXBuildFile; fileRef = 650995C81514E27A00123406 /* GLES-Render.mm */; };
 		650995CC1514E27A00123406 /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = 650995CB1514E27A00123406 /* blocks.png */; };
+		65B1C61115156F3400164BD1 /* MyContactListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65B1C61015156F3400164BD1 /* MyContactListener.mm */; };
+		65B1C6151515714800164BD1 /* acorn.png in Resources */ = {isa = PBXBuildFile; fileRef = 65B1C6141515714800164BD1 /* acorn.png */; };
+		65B1C6181515737600164BD1 /* MusicHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65B1C6171515737600164BD1 /* MusicHandler.mm */; };
+		65B1C6201515778000164BD1 /* wood.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 65B1C61F1515778000164BD1 /* wood.mp3 */; };
 		65E9A7A2151520F100E3F89A /* CompoundNew.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65E9A7A1151520F100E3F89A /* CompoundNew.mm */; };
 		65E9A7A815152D0F00E3F89A /* Squirrel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65E9A7A715152D0F00E3F89A /* Squirrel.mm */; };
 /* End PBXBuildFile section */
@@ -475,6 +479,12 @@
 		650995C81514E27A00123406 /* GLES-Render.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "GLES-Render.mm"; sourceTree = "<group>"; };
 		650995CA1514E27A00123406 /* GameConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameConfig.h; sourceTree = "<group>"; };
 		650995CB1514E27A00123406 /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blocks.png; path = Resources/blocks.png; sourceTree = "<group>"; };
+		65B1C61015156F3400164BD1 /* MyContactListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyContactListener.mm; sourceTree = "<group>"; };
+		65B1C61315156F4000164BD1 /* MyContactListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyContactListener.h; sourceTree = "<group>"; };
+		65B1C6141515714800164BD1 /* acorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = acorn.png; sourceTree = "<group>"; };
+		65B1C6161515736900164BD1 /* MusicHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicHandler.h; sourceTree = "<group>"; };
+		65B1C6171515737600164BD1 /* MusicHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MusicHandler.mm; sourceTree = "<group>"; };
+		65B1C61F1515778000164BD1 /* wood.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = wood.mp3; sourceTree = "<group>"; };
 		65E9A7A1151520F100E3F89A /* CompoundNew.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CompoundNew.mm; sourceTree = "<group>"; };
 		65E9A7A51515210200E3F89A /* CompoundNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompoundNew.h; sourceTree = "<group>"; };
 		65E9A7A615152CFC00E3F89A /* Squirrel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Squirrel.h; sourceTree = "<group>"; };
@@ -535,6 +545,10 @@
 		650993F91514E27200123406 /* NewtonsCradle */ = {
 			isa = PBXGroup;
 			children = (
+				65B1C6161515736900164BD1 /* MusicHandler.h */,
+				65B1C6171515737600164BD1 /* MusicHandler.mm */,
+				65B1C61315156F4000164BD1 /* MyContactListener.h */,
+				65B1C61015156F3400164BD1 /* MyContactListener.mm */,
 				65E9A7A615152CFC00E3F89A /* Squirrel.h */,
 				65E9A7A715152D0F00E3F89A /* Squirrel.mm */,
 				65E9A7A51515210200E3F89A /* CompoundNew.h */,
@@ -558,6 +572,8 @@
 		650993FA1514E27200123406 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				65B1C61F1515778000164BD1 /* wood.mp3 */,
+				65B1C6141515714800164BD1 /* acorn.png */,
 				650993FB1514E27200123406 /* Default.png */,
 				650993FD1514E27200123406 /* fps_images.png */,
 				650993FF1514E27200123406 /* Icon-72.png */,
@@ -1073,6 +1089,8 @@
 				6509940A1514E27300123406 /* Icon@2x.png in Resources */,
 				6509940D1514E27300123406 /* iTunesArtwork in Resources */,
 				650995CC1514E27A00123406 /* blocks.png in Resources */,
+				65B1C6151515714800164BD1 /* acorn.png in Resources */,
+				65B1C6201515778000164BD1 /* wood.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1219,6 +1237,8 @@
 				650995C91514E27A00123406 /* GLES-Render.mm in Sources */,
 				65E9A7A2151520F100E3F89A /* CompoundNew.mm in Sources */,
 				65E9A7A815152D0F00E3F89A /* Squirrel.mm in Sources */,
+				65B1C61115156F3400164BD1 /* MyContactListener.mm in Sources */,
+				65B1C6181515737600164BD1 /* MusicHandler.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

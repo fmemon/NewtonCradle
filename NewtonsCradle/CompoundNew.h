@@ -11,6 +11,7 @@
 #import "cocos2d.h"
 #import "Box2D.h"
 #import "GLES-Render.h"
+#import "MyContactListener.h"
 
 // CompoundNew
 @interface CompoundNew : CCLayer
@@ -42,7 +43,6 @@
     b2MouseJoint *mouseJoint;
 	b2Body* bulletBody;
     b2Body* bulletBody2; //reference to anchor body
-    b2Body *groundBody;
     
     
     b2Fixture *armFixture;
@@ -51,7 +51,9 @@
     b2WeldJoint *bulletJoint;
     b2MouseJoint *_mouseJoint;
     b2MouseJointDef md;
-
+    
+        MyContactListener *contactListener;
+    CCSprite *acorn;
 }
 
 // returns a CCScene that contains the CompoundNew as the only child

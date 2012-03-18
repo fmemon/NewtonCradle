@@ -9,6 +9,8 @@
 
 // Import the interfaces
 #import "CompoundNew.h"
+#import "SimpleAudioEngine.h"
+#import "MusicHandler.h"
 
 //Pixel to metres ratio. Box2D uses metres as the unit for measurement.
 //This ratio defines how many pixels correspond to 1 Box2D "metre"
@@ -109,9 +111,20 @@ enum {
         
 		//Set up sprite
         anchors = [[NSMutableArray alloc] initWithCapacity:4];
+        acorn = [CCSprite spriteWithFile:@"acorn.png"];
+        acorn.position = ccp(screenSize.width/2, 50/PTM_RATIO);
+        [self addChild:acorn z:1 tag:11];
+        // Preload effect
+        [MusicHandler preload];
         
-        //[self rubeGoldberg2];
-        [self rubeGoldberg3];
+        
+        // Create contact listener
+        contactListener = new MyContactListener();
+        world->SetContactListener(contactListener);
+        
+        [self createEachPendulum2:10.0f];
+
+        //[self rubeGoldberg3];
 
         [self schedule: @selector(tick:)]; 
     }
@@ -165,7 +178,7 @@ enum {
 
 - (void) createEachPendulum2:(float)delta {
     
-    float spacing = 1.0f;
+    float spacing = 1.5f;
     
     for (int i=0; i<4; i++) {
         
@@ -187,38 +200,12 @@ enum {
         fd.filter.maskBits = uint16(65535);
         polygon1->CreateFixture(&fd);
 
-    /*    //Circles
-        bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
-        bodyDef.angle = 0.000000f;
-        b2Body* circle1 = world->CreateBody(&bodyDef);
-        initVel.Set(0.000000f, 0.000000f);
-        circle1->SetLinearVelocity(initVel);
-        circle1->SetAngularVelocity(0.000000f);
-        circleShape.m_radius = 0.5f;
-        fd.shape = &circleShape;
-        fd.density = 1.0;
-        fd.friction = 0.300000f;
-        fd.restitution = 0.600000f;
-        fd.filter.groupIndex = int16(0);
-        fd.filter.categoryBits = uint16(65535);
-        fd.filter.maskBits = uint16(65535);
-        circle1->CreateFixture(&fd);
-     
-     [anchors addObject:[NSValue valueWithPointer:polygon1]];
-
-*/
         // Define the dynamic body.
-        //Set up a 1m squared box in the physics world
         bodyDef.type = b2_dynamicBody;
-        
         bodyDef.position.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f -1.65f*0.5f);
+        bodyDef.userData = acorn;
         b2Body *circle1 = world->CreateBody(&bodyDef);
         [anchors addObject:[NSValue valueWithPointer:circle1]];
-        
-        // Define another box shape for our dynamic body.
-        //b2PolygonShape dynamicBox;
-        //dynamicBox.SetAsBox(.5f, .5f);//These are mid points for our 1m box
-        
         b2CircleShape dynamicBox;
         dynamicBox.m_radius = 18.0/PTM_RATIO;
         
@@ -228,7 +215,6 @@ enum {
         fixtureDef.friction = 0.1f;
         fixtureDef.restitution = 1.0f;
         circle1->CreateFixture(&fixtureDef);
-        
 
         //turns
         //Revolute joints
@@ -237,11 +223,11 @@ enum {
         revJointDef.collideConnected = false;
         world->CreateJoint(&revJointDef);
         
-        pos.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f - 1.65f*0.5f);
+       // pos.Set(polygon1->GetWorldCenter().x, polygon1->GetWorldCenter().y -0.75f - 1.65f*0.5f);
+        pos.Set(circle1->GetWorldCenter().x, circle1->GetWorldCenter().y);
         revJointDef.Initialize(polygon1, circle1, pos);
         revJointDef.collideConnected = false;
         world->CreateJoint(&revJointDef);
-        
     }
 }
 
@@ -288,6 +274,25 @@ enum {
 			myActor.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
 		}	
 	}
+    
+    
+    
+    
+    // Loop through all of the box2d bodies that are currently colliding, that we have
+    // gathered with our custom contact listener...
+    std::vector<MyContact>::iterator pos2;
+    for(pos2 = contactListener->_contacts.begin(); pos2 != contactListener->_contacts.end(); ++pos2) {
+        MyContact contact = *pos2;
+        
+        // Get the box2d bodies for each object
+        b2Body *bodyA = contact.fixtureA->GetBody();
+        b2Body *bodyB = contact.fixtureB->GetBody();
+        //[[SimpleAudioEngine sharedEngine] playEffect: @"wood.wav"];
+       [MusicHandler playBounce];
+    }
+
+    
+    
 }
 
 
