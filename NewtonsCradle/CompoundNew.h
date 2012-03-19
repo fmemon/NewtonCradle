@@ -65,5 +65,7 @@
 - (CCAction*)createResetAnim;
 - (void)SNHit;
 - (void)MRHit;
+- (void)createMenu;
+
 
 @end

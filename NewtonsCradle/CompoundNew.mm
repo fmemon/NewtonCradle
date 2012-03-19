@@ -128,6 +128,8 @@ enum {
         contactListener = new MyContactListener();
         world->SetContactListener(contactListener);
         
+        [self createMenu];
+        
         [self createEachPendulum2:10.0f];
         
         delta =0.75;
@@ -161,7 +163,7 @@ enum {
     fd.restitution = 0.600000f;
     anchor->CreateFixture(&fd);
         
-    for (int i=0; i<4; i++) {
+ /*   for (int i=0; i<4; i++) {
         
         //bodyDef.angularDamping = 1.0f;
         
@@ -231,48 +233,114 @@ enum {
         weldJointDef.Initialize(stick, acorn, pos);
         world->CreateJoint(&weldJointDef);
         */
+    
+    for (int i=0; i<4; i++) {
         
-        //menuitem
-   /*     CCLabelTTF* tapLabel = [CCLabelTTF labelWithString:@"All Rights Reserved 2012 BestWhich.com" fontName:@"Arial" fontSize:14];
-		tapLabel.position = ccp(310.0f, 30.0f);    
-        tapLabel.color = ccBLUE;
-		[self addChild: tapLabel];
-     */
-/*        CCSprite *sprite2 = [CCSprite spriteWithFile:@"bg.png"];
-        sprite2.anchorPoint = CGPointZero;
-        [self addChild:sprite2 z:-11];
-  */      
-        CCMenuItem *restartItem = [CCMenuItemFont itemFromString:@"restart" target:self selector:@selector(reset)];
-      /*  CCMenuItemSprite* muteItem= [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
-                                                                    selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]
-                                                                    disabledSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]
-                                                                            target:self
-                                                                          selector:@selector(turnOnMusic)];		
+        //sticks
+        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick3.png"];
+        sticksSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
+        [self addChild:sticksSprite z:-11 tag:11];
+        bodyDef.userData = sticksSprite;
+        bodyDef.type=b2_dynamicBody;
+        bodyDef.position.Set(4.7f+ (spacing*i), 6.5f);
+        bodyDef.angle = 0.000000f;
+        b2Body* stick = world->CreateBody(&bodyDef);
+        initVel.Set(0.000000f, 0.000000f);
+        stick->SetLinearVelocity(initVel);
+        stick->SetAngularVelocity(0.000000f);
+        boxy.SetAsBox(0.05f,2.85f);
+        fd.shape = &boxy;        
+        fd.density = 1.0f;
+        fd.friction = 0.0f;
+        stick->CreateFixture(&fd);
+        // Define the dynamic body.
+        bodyDef.type = b2_dynamicBody;
+        bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
         
         
+        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate%i.png", i+1]];
+        acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
+        [self addChild:acornSprite z:1 tag:11];
+        bodyDef.userData = acornSprite;
+        b2Body *acorn = world->CreateBody(&bodyDef);
+        [acorns addObject:[NSValue valueWithPointer:acorn]];
+        b2CircleShape dynamicBox;
+        //dynamicBox.m_radius = 18.0/PTM_RATIO;
+        dynamicBox.m_radius = 25.71/PTM_RATIO;
+        fixtureDef.shape = &dynamicBox;	
+        fixtureDef.friction = 1;
+        fixtureDef.density = 10;
+        fixtureDef.restitution = 1;
         
-        CCMenu *menu = [CCMenu menuWithItems:muteItem, restartItem, nil]; */
+        acorn->CreateFixture(&fixtureDef);
         
-        CCMenuItemSprite *playItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
-                                                             selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]];
+        //Revolute joints
+        pos.Set(4.764226f+ (spacing*i), 9.3f);
+        revJointDef.Initialize(stick, anchor, pos);
+        revJointDef.collideConnected = false;
+        world->CreateJoint(&revJointDef);
         
-		CCMenuItemSprite *pauseItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseOFF.png"]
-                                                              selectedSprite:[CCSprite spriteWithFile:@"newPauseOFFSelect.png"]];
-        CCMenuItemToggle *pause;
-		if (!muted)  {
-            pause = [CCMenuItemToggle itemWithTarget:self selector:@selector(turnOnMusic)items:playItem, pauseItem, nil];
-        }
-        else {
-            pause = [CCMenuItemToggle itemWithTarget:self selector:@selector(turnOnMusic)items:pauseItem, playItem, nil];
-        }
+        pos.Set(acorn->GetWorldCenter().x, acorn->GetWorldCenter().y);
         
-        //Create Menu with the items created before
-		CCMenu *menu = [CCMenu menuWithItems:pause,restartItem, nil];
-		[self addChild:menu z:11];
-		[menu alignItemsHorizontally];
-		[menu setPosition:ccp(90.0f, 35.0f)];
-        		        
+        /*
+         revJointDef.Initialize(stick, acorn, pos);
+         revJointDef.collideConnected = false;
+         revJointDef.motorSpeed = 0.0f;
+         revJointDef.enableMotor = false;
+         revJointDef.maxMotorTorque = 5.0f;
+         world->CreateJoint(&revJointDef);
+         */
+        
+        b2WeldJointDef weldJointDef;
+        weldJointDef.Initialize(stick, acorn, pos);
+        world->CreateJoint(&weldJointDef);
     }
+        
+
+        		        
+
+}
+
+- (void)createMenu {
+    //menuitem
+    /*     CCLabelTTF* tapLabel = [CCLabelTTF labelWithString:@"All Rights Reserved 2012 BestWhich.com" fontName:@"Arial" fontSize:14];
+     tapLabel.position = ccp(310.0f, 30.0f);    
+     tapLabel.color = ccBLUE;
+     [self addChild: tapLabel];
+     */
+    /*        CCSprite *sprite2 = [CCSprite spriteWithFile:@"bg.png"];
+     sprite2.anchorPoint = CGPointZero;
+     [self addChild:sprite2 z:-11];
+     */      
+    CCMenuItem *restartItem = [CCMenuItemFont itemFromString:@"restart" target:self selector:@selector(reset)];
+    /*  CCMenuItemSprite* muteItem= [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
+     selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]
+     disabledSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]
+     target:self
+     selector:@selector(turnOnMusic)];		
+     
+     
+     
+     CCMenu *menu = [CCMenu menuWithItems:muteItem, restartItem, nil]; */
+    
+    CCMenuItemSprite *playItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
+                                                         selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]];
+    
+    CCMenuItemSprite *pauseItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseOFF.png"]
+                                                          selectedSprite:[CCSprite spriteWithFile:@"newPauseOFFSelect.png"]];
+    CCMenuItemToggle *pause;
+    if (!muted)  {
+        pause = [CCMenuItemToggle itemWithTarget:self selector:@selector(turnOnMusic)items:playItem, pauseItem, nil];
+    }
+    else {
+        pause = [CCMenuItemToggle itemWithTarget:self selector:@selector(turnOnMusic)items:pauseItem, playItem, nil];
+    }
+    
+    //Create Menu with the items created before
+    CCMenu *menu = [CCMenu menuWithItems:pause,restartItem, nil];
+    [self addChild:menu z:11];
+    [menu alignItemsHorizontally];
+    [menu setPosition:ccp(90.0f, 35.0f)];
 }
 
 
@@ -608,7 +676,7 @@ enum {
             CCSprite *spriteB = (CCSprite *) bodyB->GetUserData();
             
             // Is sprite A a cat and sprite B a car? 
-            if ((spriteA.tag >= 10 && spriteB.tag >= 10) ){
+            if ((spriteA.tag >= 10 && spriteB.tag >= 11) ){
                if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) [MusicHandler playBounce];
                 //NSLog(@"BodyA velocity vector %0.0f %0.0f", bodyA->GetLinearVelocity().x,bodyA->GetLinearVelocity().y );
                 //NSLog(@"BodyB velocity vector %0.0f %0.0f", bodyB->GetLinearVelocity().x,bodyB->GetLinearVelocity().y );
