@@ -175,7 +175,9 @@ enum {
         boxy.SetAsBox(0.03f,2.85f);
         fd.shape = &boxy;        
         fd.density = 1.0f;
-        fd.friction = 0.0f;
+        fd.friction = 1.0f;
+        
+        
         stick->CreateFixture(&fd);
         // Define the dynamic body.
         bodyDef.type = b2_dynamicBody;
@@ -445,10 +447,7 @@ enum {
     b2Vec2 locationWorld = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
     
     bulletBody = (b2Body*)[[acorns objectAtIndex:0] pointerValue];
-    bulletBody2 = (b2Body*)[[acorns lastObject] pointerValue];
-  	//CCLOG(@"Body2bulletBody2bulletBody2 %0.2f x %02.f",bulletBody2->GetWorldCenter().x , bulletBody2->GetWorldCenter().y);
-  	//CCLOG(@"11111111111111111111111 %0.2f x %02.f",bulletBody->GetWorldCenter().x , bulletBody->GetWorldCenter().y);
-    
+    bulletBody2 = (b2Body*)[[acorns lastObject] pointerValue];    
     
     if (locationWorld.x > bulletBody2->GetWorldCenter().x - 50.0/PTM_RATIO)
     {
