@@ -50,7 +50,7 @@
     float spacing;
     float delta;
     float predelta;
-
+    float angimp;
     
     NSMutableArray *walkAnimFrames;
 }

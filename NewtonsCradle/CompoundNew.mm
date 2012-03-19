@@ -30,6 +30,11 @@ static inline float mtp(float d)
     return d * PTM_RATIO;
 }
 
+static inline float radDiff( float a, float b )
+{
+    return atan2( sin(a-b), cos(a-b) );
+}
+
 // enums that will be used as tags
 enum {
 	kTagTileMap = 1,
@@ -324,8 +329,14 @@ enum {
             
             if (spriteA.tag == 11 && spriteB.tag == 11) {
                 if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) {
-                    bodyA->ApplyAngularImpulse( 15.0f );
-                    bodyB->ApplyAngularImpulse( 15.0f );   
+                    //bodyA->ApplyAngularImpulse( 15.0f );
+                    //bodyB->ApplyAngularImpulse( 15.0f );  
+                    
+                /*    angimp = bodyA->GetInertia() * radDiff( 5.0f, bodyA->GetAngle() );
+                    bodyA->ApplyAngularImpulse( angimp );
+                    angimp = bodyB->GetInertia() * radDiff( 5.0f, bodyB->GetAngle() );
+                    bodyB->ApplyAngularImpulse( angimp );
+                 */
                 [MusicHandler playBounce];
                 }
             } 
