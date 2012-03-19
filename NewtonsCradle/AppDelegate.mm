@@ -14,7 +14,7 @@
 #import "RootViewController.h"
 #import "CompoundNew.h"
 #import "Squirrel.h"
-
+#import "CompoundBody.h"
 
 @implementation AppDelegate
 
@@ -117,6 +117,7 @@
 	//[[CCDirector sharedDirector] runWithScene: [HelloWorldLayer scene]];
 	[[CCDirector sharedDirector] runWithScene: [CompoundNew scene]];
 	//[[CCDirector sharedDirector] runWithScene: [Squirrel scene]];
+	//[[CCDirector sharedDirector] runWithScene: [CompoundBody scene]];
 }
 
 

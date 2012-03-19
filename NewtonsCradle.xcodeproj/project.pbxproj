@@ -175,6 +175,7 @@
 		65B352B51516CC1D008B3472 /* stick4.png in Resources */ = {isa = PBXBuildFile; fileRef = 65B352B41516CC1D008B3472 /* stick4.png */; };
 		65B352C21516D793008B3472 /* newtscradle.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65B352C01516D793008B3472 /* newtscradle.plist */; };
 		65B352C31516D793008B3472 /* newtscradle.png in Resources */ = {isa = PBXBuildFile; fileRef = 65B352C11516D793008B3472 /* newtscradle.png */; };
+		65B352C71516E586008B3472 /* CompoundBody.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65B352C61516E586008B3472 /* CompoundBody.mm */; };
 		65E9A7A2151520F100E3F89A /* CompoundNew.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65E9A7A1151520F100E3F89A /* CompoundNew.mm */; };
 		65E9A7A815152D0F00E3F89A /* Squirrel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65E9A7A715152D0F00E3F89A /* Squirrel.mm */; };
 /* End PBXBuildFile section */
@@ -509,6 +510,8 @@
 		65B352B41516CC1D008B3472 /* stick4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stick4.png; sourceTree = "<group>"; };
 		65B352C01516D793008B3472 /* newtscradle.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = newtscradle.plist; sourceTree = "<group>"; };
 		65B352C11516D793008B3472 /* newtscradle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newtscradle.png; sourceTree = "<group>"; };
+		65B352C61516E586008B3472 /* CompoundBody.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CompoundBody.mm; sourceTree = "<group>"; };
+		65B352C81516E594008B3472 /* CompoundBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompoundBody.h; sourceTree = "<group>"; };
 		65E9A7A1151520F100E3F89A /* CompoundNew.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CompoundNew.mm; sourceTree = "<group>"; };
 		65E9A7A51515210200E3F89A /* CompoundNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompoundNew.h; sourceTree = "<group>"; };
 		65E9A7A615152CFC00E3F89A /* Squirrel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Squirrel.h; sourceTree = "<group>"; };
@@ -569,6 +572,8 @@
 		650993F91514E27200123406 /* NewtonsCradle */ = {
 			isa = PBXGroup;
 			children = (
+				65B352C81516E594008B3472 /* CompoundBody.h */,
+				65B352C61516E586008B3472 /* CompoundBody.mm */,
 				65B1C6161515736900164BD1 /* MusicHandler.h */,
 				65B1C6171515737600164BD1 /* MusicHandler.mm */,
 				65B1C61315156F4000164BD1 /* MyContactListener.h */,
@@ -1287,6 +1292,7 @@
 				65E9A7A815152D0F00E3F89A /* Squirrel.mm in Sources */,
 				65B1C61115156F3400164BD1 /* MyContactListener.mm in Sources */,
 				65B1C6181515737600164BD1 /* MusicHandler.mm in Sources */,
+				65B352C71516E586008B3472 /* CompoundBody.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -34,6 +34,7 @@
     b2PolygonShape boxy;
 
     NSMutableArray *acorns;
+    NSMutableArray *sticks;
     
     b2MouseJoint *mouseJoint;
 	b2Body* bulletBody;

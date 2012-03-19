@@ -160,6 +160,8 @@ enum {
         
     for (int i=0; i<4; i++) {
         
+        //bodyDef.angularDamping = 1.0f;
+        
         //sticks
         CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick4.png"];
         sticksSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
@@ -176,20 +178,20 @@ enum {
         fd.shape = &boxy;        
         fd.density = 1.0f;
         fd.friction = 1.0f;
-        
-        
         stick->CreateFixture(&fd);
-        // Define the dynamic body.
+
         bodyDef.type = b2_dynamicBody;
         bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
-
-        
-        //acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate%i.png", i+1]];
         acornSprite = [CCSprite spriteWithFile:@"candidate21.png"];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
         //[acornSprite runAction:[self createRightHookAnim]];
         bodyDef.userData = acornSprite;
+        
+        //put acorn to sleep
+        //bodyDef.allowSleep = true;
+        //bodyDef.awake = FALSE;
+
         b2Body *acorn = world->CreateBody(&bodyDef);
         [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
@@ -222,6 +224,7 @@ enum {
         b2WeldJointDef weldJointDef;
         weldJointDef.Initialize(stick, acorn, pos);
         world->CreateJoint(&weldJointDef);
+        
         
         //menuitem
         CCLabelTTF* tapLabel = [CCLabelTTF labelWithString:@"All Rights Reserved 2012 BestWhich.com" fontName:@"Arial" fontSize:14];
@@ -428,7 +431,7 @@ enum {
             
             // Is sprite A a cat and sprite B a car? 
             if (spriteA.tag == 11 && spriteB.tag == 11) {
-               if (abs(bodyA->GetLinearVelocity().x) > 3 || abs(bodyB->GetLinearVelocity().x) > 3) [MusicHandler playBounce];
+               if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) [MusicHandler playBounce];
                 NSLog(@"BodyA velocity vector %0.0f %0.0f", bodyA->GetLinearVelocity().x,bodyA->GetLinearVelocity().y );
                 NSLog(@"BodyB velocity vector %0.0f %0.0f", bodyB->GetLinearVelocity().x,bodyB->GetLinearVelocity().y );
             } 
