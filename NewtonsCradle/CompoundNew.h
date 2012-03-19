@@ -48,6 +48,7 @@
     
     BOOL muted;
     float spacing;
+    float delta;
     
     NSMutableArray *walkAnimFrames;
 }
@@ -62,5 +63,7 @@
 - (CCAction*)createLeftHookAnim;
 - (CCAction*)createRightHookAnim;
 - (CCAction*)createResetAnim;
+- (void)SNHit;
+- (void)MRHit;
 
 @end
