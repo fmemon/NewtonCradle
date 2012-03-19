@@ -146,6 +146,7 @@ enum {
 
 - (void) createEachPendulum2:(float)delta {
 
+    
     //top anchor
     CCSprite *woodSprite = [CCSprite spriteWithFile:@"wood.png"];
     woodSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
@@ -272,8 +273,10 @@ enum {
     // Lets say you have this as the CCAnimation for Sprite1
     [walkAnimFrames removeAllObjects];
     //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate41.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate42.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate43.png"]];
+    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate42.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate47.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate41.png"]];
+
     CCAnimation *SNAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
        
     id animateAction = [CCAnimate actionWithAnimation:SNAnim restoreOriginalFrame:NO];    
@@ -294,8 +297,10 @@ enum {
     [walkAnimFrames removeAllObjects];
     //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate33.png"]];
     //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate34.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate32.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate33.png"]];
+    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate32.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate37.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate31.png"]];
+
     CCAnimation *NRAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
     
     id animateAction = [CCAnimate actionWithAnimation:NRAnim restoreOriginalFrame:NO];    
@@ -316,8 +321,9 @@ enum {
     [walkAnimFrames removeAllObjects];
     //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate23.png"]];
     //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate24.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate22.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate23.png"]];
+    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate22.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate27.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate11.png"]];
     CCAnimation *RMAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
     
     id animateAction = [CCAnimate actionWithAnimation:RMAnim restoreOriginalFrame:NO];    
@@ -337,7 +343,8 @@ enum {
 
 -(void)startMHit {
     [walkAnimFrames removeAllObjects];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate13.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate17.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate11.png"]];
     CCAnimation *MAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
     
     id animateAction = [CCAnimate actionWithAnimation:MAnim restoreOriginalFrame:NO];    
@@ -360,8 +367,8 @@ enum {
     // Lets say you have this as the CCAnimation for Sprite1
     [walkAnimFrames removeAllObjects];
     //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate14.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate15.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate16.png"]];
+    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate15.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate17.png"]];
     [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate11.png"]];
     CCAnimation *MRAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
     
@@ -382,9 +389,9 @@ enum {
 -(void)startRNHit {
     [walkAnimFrames removeAllObjects];
    // [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate34.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate35.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate36.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate31.png"]];
+    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate35.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate26.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate21.png"]];
     CCAnimation *RNAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
     
     id animateAction = [CCAnimate actionWithAnimation:RNAnim restoreOriginalFrame:NO];    
@@ -404,9 +411,9 @@ enum {
 -(void)startNSHit {
     [walkAnimFrames removeAllObjects];
     //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate24.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate25.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate26.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate21.png"]];
+   // [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate25.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate36.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate31.png"]];
     CCAnimation *NSAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
     
     id animateAction = [CCAnimate actionWithAnimation:NSAnim restoreOriginalFrame:NO];    
@@ -433,7 +440,7 @@ enum {
     id animateAction = [CCAnimate actionWithAnimation:SAnim restoreOriginalFrame:NO];    
     
     
-    b2Body* sant = (b2Body*)[[acorns objectAtIndex:0] pointerValue];    
+    b2Body* sant = (b2Body*)[[acorns objectAtIndex:3] pointerValue];    
     CCSprite *santy = (CCSprite *) sant->GetUserData();
     
     [santy stopAllActions]; // If you have actions running
@@ -504,30 +511,16 @@ enum {
 }
 
 - (CCAction*)createBlinkAnim {
+    delta =0.2f;
     [walkAnimFrames removeAllObjects];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate41.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate47.png"]];
+
+    CCAnimation *SAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
     
-    for (int i=1; i<6; i++) {
-        [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"candidate2%d.png", i]]];
-    }
+    CCAnimate *blink = [CCAnimate actionWithAnimation:SAnim restoreOriginalFrame:YES];    
     
-    CCAnimation *walkAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:2.0f];
-    
-    CCAnimate *blink = [CCAnimate actionWithDuration:10.0f animation:walkAnim restoreOriginalFrame:YES];
-    
-    /*CCAction *walkAction = [CCRepeatForever actionWithAction:
-                            [CCSequence actions:
-                             [CCDelayTime actionWithDuration:CCRANDOM_0_1()*2.0f],
-                             blink,
-                             [CCDelayTime actionWithDuration:CCRANDOM_0_1()*3.0f],
-                             blink,
-                             [CCDelayTime actionWithDuration:CCRANDOM_0_1()*0.2f],
-                             blink,
-                             [CCDelayTime actionWithDuration:CCRANDOM_0_1()*2.0f],
-                             nil]
-                            ];
-    */
-    
-    CCAction *walkAction = [CCRepeatForever actionWithAction:blink];
+    CCAction *walkAction = [CCRepeat actionWithAction:blink times:1];
 
     return walkAction;
 }
@@ -621,24 +614,30 @@ enum {
             CCSprite *spriteB = (CCSprite *) bodyB->GetUserData();
             
             // Is sprite A a cat and sprite B a car? 
-            if ((spriteA.tag >= 10 && spriteB.tag >= 11) ){
-               if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) 
-               {[MusicHandler playBounce];
+            if ((spriteA.tag >= 10 && spriteB.tag >= 10) ){
+               if (abs(bodyA->GetLinearVelocity().x) > 1|| abs(bodyB->GetLinearVelocity().x) >1) 
+               {
+                   [spriteA runAction:[self createBlinkAnim]];
+                   [spriteB runAction:[self createBlinkAnim]];
+
+                   [MusicHandler playBounce];
                 //NSLog(@"BodyA velocity vector %0.0f %0.0f", bodyA->GetLinearVelocity().x,bodyA->GetLinearVelocity().y );
                 //NSLog(@"BodyB velocity vector %0.0f %0.0f", bodyB->GetLinearVelocity().x,bodyB->GetLinearVelocity().y );
-
+                   /*
                    if (spriteA.tag ==13 || spriteB.tag == 13) {
                        if (bodyA->GetLinearVelocity().x < -1 || bodyB->GetLinearVelocity().x < -1) {
                            predelta = (abs(bodyA->GetLinearVelocity().x) > abs(bodyB->GetLinearVelocity().x))? bodyA->GetLinearVelocity().x : bodyB->GetLinearVelocity().x;
-                           delta = 0.05f +(1/abs(predelta + 0.10f));
+                           delta = 0.10f +(1/abs(predelta + 0.10f));
                        [self SNHit];
                        }
                    }
-                   if (spriteA.tag ==10 || spriteB.tag == 10) {
+                   */
+          /*         if (spriteA.tag ==10 || spriteB.tag == 10) {
                        predelta = (abs(bodyA->GetLinearVelocity().x) > abs(bodyB->GetLinearVelocity().x))? bodyA->GetLinearVelocity().x : bodyB->GetLinearVelocity().x;
-                       delta = 0.25 +(1/abs(predelta + 0.10f));
+                       delta = 0.10f +(1/abs(predelta + 0.10f));
                        if (bodyA->GetLinearVelocity().x > 1 || bodyB->GetLinearVelocity().x > 1) [self MRHit];
                    }
+           */
                }
                 
             } 
