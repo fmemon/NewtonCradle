@@ -130,6 +130,7 @@ enum {
 - (void) createEachPendulum2:(float)delta {
         
     spacing = 1.63f;
+    //spacing = 1.83f;
     
     //top anchor
     CCSprite *woodSprite = [CCSprite spriteWithFile:@"wood.png"];
@@ -137,7 +138,7 @@ enum {
     [self addChild:woodSprite z:1 tag:11];
     bodyDef.userData = woodSprite;
     bodyDef.type = b2_staticBody;
-    bodyDef.position.Set(7.0f, 360/PTM_RATIO *0.83f);
+    bodyDef.position.Set(7.5f, 360/PTM_RATIO *0.83f);
     bodyDef.type = b2_staticBody;
     bodyDef.angle = 0.000000f;
     b2Body* anchor = world->CreateBody(&bodyDef);
@@ -169,16 +170,19 @@ enum {
         stick->CreateFixture(&fd);
         
         // acorns
-        bodyDef.type = b2_dynamicBody;
-        bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
+        bodyDef1.type = b2_dynamicBody;
+        bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
         
         //acorns
         acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateA%i.png", i+1]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
 
-        bodyDef.userData = acornSprite;
-        b2Body *acorn = world->CreateBody(&bodyDef);
+        bodyDef1.userData = acornSprite;
+        b2Body *acorn = world->CreateBody(&bodyDef1);
+        //Slows the rotation down
+        //bodyDef1.linearDamping = 0.01f; //really slows everything down
+        bodyDef1.angularDamping = 0.01f;
         [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
         dynamicBox.m_radius = 25.71/PTM_RATIO;
@@ -186,7 +190,8 @@ enum {
         fixtureDef.friction = 1.0f;
         fixtureDef.density = 10.0f;
         fixtureDef.restitution = 1.0f;
-        
+        //acorn->SetAngularVelocity(5.000000f); //makes heads spin initially
+
         acorn->CreateFixture(&fixtureDef);
         
         //Revolute joints
@@ -318,7 +323,11 @@ enum {
             //spriteB.color = ccMAGENTA;
             
             if (spriteA.tag == 11 && spriteB.tag == 11) {
-                if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) [MusicHandler playBounce];
+                if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) {
+                    bodyA->ApplyAngularImpulse( 15.0f );
+                    bodyB->ApplyAngularImpulse( 15.0f );   
+                [MusicHandler playBounce];
+                }
             } 
         }  
         
