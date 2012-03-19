@@ -49,6 +49,8 @@
     BOOL muted;
     float spacing;
     float delta;
+    float predelta;
+
     
     NSMutableArray *walkAnimFrames;
 }
