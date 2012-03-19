@@ -59,15 +59,12 @@ enum {
 -(id)init
 
 {
-    
     if( (self=[super init])) { 
         
         // enable touches
         self.isTouchEnabled = YES; 
         
         muted = FALSE;
-        //spacing = 1.63f;
-        spacing = 1.34f;
         
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         CCLOG(@"Screen width %0.2f screen height %0.2f",screenSize.width,screenSize.height); 
@@ -83,13 +80,13 @@ enum {
         world = new b2World(gravity, doSleep); 
         world->SetContinuousPhysics(true); 
         
-        // Debug Draw functions
+       /* // Debug Draw functions
         m_debugDraw = new GLESDebugDraw( PTM_RATIO );
         world->SetDebugDraw(m_debugDraw); 
         uint32 flags = 0;
         flags += b2DebugDraw::e_shapeBit;
         m_debugDraw->SetFlags(flags);  
-        
+        */
         ground = world->CreateBody(&bd);
         
         //Box
@@ -105,18 +102,15 @@ enum {
         shape.SetAsEdge(b2Vec2(0.000000f, 10.000000f), b2Vec2(0.000000f, 0.000000f)); //;left wall
         groundBody->CreateFixture(&shape,0);
         
-        
 		//Set up sprite
         acorns = [[NSMutableArray alloc] initWithCapacity:4];
         
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"newtscradle.plist"];
         CCSpriteBatchNode*  spriteSheet = [CCSpriteBatchNode batchNodeWithFile:@"newtscradle.png"];
         [self addChild:spriteSheet];
-
         
         // Preload effect
         [MusicHandler preload];
-        
         
         // Create contact listener
         contactListener = new MyContactListener();
@@ -126,18 +120,17 @@ enum {
         
         [self createEachPendulum2:10.0f];
         
-        
         [self schedule: @selector(tick:)]; 
     }
     
     return self; 
-    
 }
 
 
 - (void) createEachPendulum2:(float)delta {
         
-            spacing = 1.63f;
+    spacing = 1.63f;
+    
     //top anchor
     CCSprite *woodSprite = [CCSprite spriteWithFile:@"wood.png"];
     woodSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
@@ -154,11 +147,6 @@ enum {
     fd.friction = 0.300000f;
     fd.restitution = 0.600000f;
     anchor->CreateFixture(&fd);
-    
-    //float spacing = 1.14f;
-    //float spacing = 1.34f;
-    //float spacing = 2*18.0/PTM_RATIO;
-    
     
     for (int i=0; i<4; i++) {
         
@@ -188,20 +176,11 @@ enum {
         acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateA%i.png", i+1]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
-       /* if (i==0) {
-            [self addChild:acornSprite z:1 tag:10];
-        } else if (i==3) {
-            [self addChild:acornSprite z:1 tag:13];
-        } else {
-            [self addChild:acornSprite z:1 tag:11];
-        }
-        */
+
         bodyDef.userData = acornSprite;
         b2Body *acorn = world->CreateBody(&bodyDef);
         [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
-        //dynamicBox.m_radius = 18.0/PTM_RATIO;
-        //dynamicBox.m_radius = 21.0f/PTM_RATIO;
         dynamicBox.m_radius = 25.71/PTM_RATIO;
         fixtureDef.shape = &dynamicBox;	
         fixtureDef.friction = 1.0f;
@@ -223,12 +202,6 @@ enum {
         revJointDef.enableMotor = false;
         revJointDef.maxMotorTorque = 5.0f;
         world->CreateJoint(&revJointDef);
-        
-        /*
-         b2WeldJointDef weldJointDef;
-         weldJointDef.Initialize(stick, acorn, pos);
-         world->CreateJoint(&weldJointDef);
-         */
     }
 }
 
@@ -237,17 +210,12 @@ enum {
     sprite2.anchorPoint = CGPointZero;
     [self addChild:sprite2 z:-11];
     
-    //CCMenuItem *restartItem = [CCMenuItemFont itemFromString:@"restart" target:self selector:@selector(reset)];
     CCMenuItemSprite* restartItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"reset.png"]
                                                             selectedSprite:[CCSprite spriteWithFile:@"resetS.png"]
                                                             disabledSprite:[CCSprite spriteWithFile:@"resetS.png"]
                                                                     target:self
-                                                                  selector:@selector(reset)];		
-    
-    
-    
-    /*CCMenu *menu = [CCMenu menuWithItems:muteItem, restartItem, nil]; */
-    
+                                                                  selector:@selector(reset)];		    
+        
     CCMenuItemSprite *playItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
                                                          selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]];
     
@@ -275,28 +243,18 @@ enum {
         bulletBody->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         bulletBody->SetAngularVelocity(0.0f);
     }
-    
 }
 
 - (void)turnOnMusic {
     if ([[SimpleAudioEngine sharedEngine] mute]) {
         // This will unmute the sound
         muted = FALSE;
-        // [[SimpleAudioEngine sharedEngine] setMute:0];
     }
     else {
         //This will mute the sound
         muted = TRUE;
-        //[[SimpleAudioEngine sharedEngine] setMute:1];
     }
     [[SimpleAudioEngine sharedEngine] setMute:muted];
-    //NSLog(@"in mute Siund %d", muted);
-    
-    /* 
-     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-     [defaults setBool:muted forKey:@"IsMuted"];
-     [defaults synchronize];
-     */
 }
 
 -(void) draw
@@ -358,8 +316,6 @@ enum {
             
             if (spriteA.tag == 11 && spriteB.tag == 11) {
                 if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) [MusicHandler playBounce];
-                //NSLog(@"BodyA velocity vector %0.0f %0.0f", bodyA->GetLinearVelocity().x,bodyA->GetLinearVelocity().y );
-               // NSLog(@"BodyB velocity vector %0.0f %0.0f", bodyB->GetLinearVelocity().x,bodyB->GetLinearVelocity().y );
             } 
         }  
         
@@ -377,8 +333,6 @@ enum {
     
     bulletBody = (b2Body*)[[acorns objectAtIndex:0] pointerValue];
     bulletBody2 = (b2Body*)[[acorns lastObject] pointerValue];
-  	//CCLOG(@"Body2bulletBody2bulletBody2 %0.2f x %02.f",bulletBody2->GetWorldCenter().x , bulletBody2->GetWorldCenter().y);
-  	//CCLOG(@"11111111111111111111111 %0.2f x %02.f",bulletBody->GetWorldCenter().x , bulletBody->GetWorldCenter().y);
     
     
     if (locationWorld.x > bulletBody2->GetWorldCenter().x - 50.0/PTM_RATIO)
@@ -397,10 +351,7 @@ enum {
         md.maxForce = 2000;
         
         mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
-    }
-    
-    //[[SimpleAudioEngine sharedEngine] playEffect: @"wood.wav"];
-    
+    }    
 }
 
 - (void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
