@@ -314,6 +314,9 @@ enum {
             CCSprite *spriteA = (CCSprite *) bodyA->GetUserData();
             CCSprite *spriteB = (CCSprite *) bodyB->GetUserData();
             
+            //spriteA.color = ccMAGENTA;
+            //spriteB.color = ccMAGENTA;
+            
             if (spriteA.tag == 11 && spriteB.tag == 11) {
                 if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) [MusicHandler playBounce];
             } 
