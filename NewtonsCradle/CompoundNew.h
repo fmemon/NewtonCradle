@@ -61,12 +61,6 @@
 - (void) createEachPendulum2:(float)delta;
 - (void)reset;
 - (void)turnOnMusic;
-- (CCAction*)createBlinkAnim;
-- (CCAction*)createLeftHookAnim;
-- (CCAction*)createRightHookAnim;
-- (CCAction*)createResetAnim;
-- (void)SNHit;
-- (void)MRHit;
 - (void)createMenu;
 
 

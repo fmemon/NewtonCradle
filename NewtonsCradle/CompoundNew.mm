@@ -17,11 +17,6 @@
 //Box2D is optimized for objects of 1x1 metre therefore it makes sense
 //to define the ratio so that your most common object type is 1x1 metre.
 #define PTM_RATIO 32
-//#define PTM_RATIO 15
-#define CompoundNewNUMBER 2 // Initial CompoundNew number
-#define STAIRNUMBER 7   // Number of stairs
-// World gravity.
-#define WORLDGRAVITY 20.0f
 
 /** Convert the given position into the box2d world. */
 static inline float ptm(float d)
@@ -70,11 +65,10 @@ enum {
         // enable touches
         self.isTouchEnabled = YES; 
         
-        walkAnimFrames = [[NSMutableArray alloc] initWithCapacity:7];
-
         muted = FALSE;
-        spacing = 1.63f;
-
+        //spacing = 1.63f;
+        spacing = 1.34f;
+        
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         CCLOG(@"Screen width %0.2f screen height %0.2f",screenSize.width,screenSize.height); 
         
@@ -110,11 +104,11 @@ enum {
         groundBody->CreateFixture(&shape,0);
         shape.SetAsEdge(b2Vec2(0.000000f, 10.000000f), b2Vec2(0.000000f, 0.000000f)); //;left wall
         groundBody->CreateFixture(&shape,0);
-
+        
         
 		//Set up sprite
         acorns = [[NSMutableArray alloc] initWithCapacity:4];
-
+        
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"newtscradle.plist"];
         CCSpriteBatchNode*  spriteSheet = [CCSpriteBatchNode batchNodeWithFile:@"newtscradle.png"];
         [self addChild:spriteSheet];
@@ -132,9 +126,6 @@ enum {
         
         [self createEachPendulum2:10.0f];
         
-        delta =0.1f;
-        //[self SNHit];
-        //[self MRHit];
         
         [self schedule: @selector(tick:)]; 
     }
@@ -145,8 +136,8 @@ enum {
 
 
 - (void) createEachPendulum2:(float)delta {
-
-    
+        
+            spacing = 1.63f;
     //top anchor
     CCSprite *woodSprite = [CCSprite spriteWithFile:@"wood.png"];
     woodSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
@@ -163,7 +154,11 @@ enum {
     fd.friction = 0.300000f;
     fd.restitution = 0.600000f;
     anchor->CreateFixture(&fd);
-        
+    
+    //float spacing = 1.14f;
+    //float spacing = 1.34f;
+    //float spacing = 2*18.0/PTM_RATIO;
+    
     
     for (int i=0; i<4; i++) {
         
@@ -179,37 +174,39 @@ enum {
         initVel.Set(0.000000f, 0.000000f);
         stick->SetLinearVelocity(initVel);
         stick->SetAngularVelocity(0.000000f);
-        boxy.SetAsBox(0.15f,2.85f);
-        fd.shape = &boxy;        
+        boxy.SetAsBox(0.05f,2.85f);
+        fd.shape = &boxy;
         fd.density = 1.0f;
         fd.friction = 0.0f;
         stick->CreateFixture(&fd);
-        // Define the dynamic body.
+        
+        // acorns
         bodyDef.type = b2_dynamicBody;
         bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
         
-        
-        acornSprite = [CCSprite spriteWithSpriteFrameName:@"candidate21.png"];
+        //acorns
+        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateA%i.png", i+1]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
-        //[self addChild:acornSprite z:1 tag:11];
-        if (i==0) {
+        [self addChild:acornSprite z:1 tag:11];
+       /* if (i==0) {
             [self addChild:acornSprite z:1 tag:10];
         } else if (i==3) {
             [self addChild:acornSprite z:1 tag:13];
         } else {
             [self addChild:acornSprite z:1 tag:11];
         }
-        
+        */
         bodyDef.userData = acornSprite;
         b2Body *acorn = world->CreateBody(&bodyDef);
         [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
         //dynamicBox.m_radius = 18.0/PTM_RATIO;
+        //dynamicBox.m_radius = 21.0f/PTM_RATIO;
         dynamicBox.m_radius = 25.71/PTM_RATIO;
         fixtureDef.shape = &dynamicBox;	
-        fixtureDef.friction = 1;
-        fixtureDef.density = 10;
-        fixtureDef.restitution = 1;
+        fixtureDef.friction = 1.0f;
+        fixtureDef.density = 10.0f;
+        fixtureDef.restitution = 1.0f;
         
         acorn->CreateFixture(&fixtureDef);
         
@@ -220,33 +217,36 @@ enum {
         world->CreateJoint(&revJointDef);
         
         pos.Set(acorn->GetWorldCenter().x, acorn->GetWorldCenter().y);
-
+        revJointDef.Initialize(stick, acorn, pos);
+        revJointDef.collideConnected = false;
+        revJointDef.motorSpeed = 0.0f;
+        revJointDef.enableMotor = false;
+        revJointDef.maxMotorTorque = 5.0f;
+        world->CreateJoint(&revJointDef);
         
-        b2WeldJointDef weldJointDef;
-        weldJointDef.Initialize(stick, acorn, pos);
-        world->CreateJoint(&weldJointDef);
+        /*
+         b2WeldJointDef weldJointDef;
+         weldJointDef.Initialize(stick, acorn, pos);
+         world->CreateJoint(&weldJointDef);
+         */
     }
-        
-
-        		        
-
 }
 
 - (void)createMenu {
     CCSprite *sprite2 = [CCSprite spriteWithFile:@"bg.png"];
-     sprite2.anchorPoint = CGPointZero;
-     [self addChild:sprite2 z:-11];
-           
+    sprite2.anchorPoint = CGPointZero;
+    [self addChild:sprite2 z:-11];
+    
     //CCMenuItem *restartItem = [CCMenuItemFont itemFromString:@"restart" target:self selector:@selector(reset)];
     CCMenuItemSprite* restartItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"reset.png"]
-     selectedSprite:[CCSprite spriteWithFile:@"resetS.png"]
-     disabledSprite:[CCSprite spriteWithFile:@"resetS.png"]
-     target:self
-     selector:@selector(reset)];		
-     
-     
-     
-     /*CCMenu *menu = [CCMenu menuWithItems:muteItem, restartItem, nil]; */
+                                                            selectedSprite:[CCSprite spriteWithFile:@"resetS.png"]
+                                                            disabledSprite:[CCSprite spriteWithFile:@"resetS.png"]
+                                                                    target:self
+                                                                  selector:@selector(reset)];		
+    
+    
+    
+    /*CCMenu *menu = [CCMenu menuWithItems:muteItem, restartItem, nil]; */
     
     CCMenuItemSprite *playItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
                                                          selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]];
@@ -266,263 +266,6 @@ enum {
     [self addChild:menu z:11];
     [menu alignItemsHorizontally];
     [menu setPosition:ccp(90.0f, 35.0f)];
-}
-
-
--(void)SNHit {
-    // Lets say you have this as the CCAnimation for Sprite1
-    [walkAnimFrames removeAllObjects];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate41.png"]];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate42.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate47.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate41.png"]];
-
-    CCAnimation *SNAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-       
-    id animateAction = [CCAnimate actionWithAnimation:SNAnim restoreOriginalFrame:NO];    
-    
-    
-    b2Body* sant = (b2Body*)[[acorns objectAtIndex:3] pointerValue];    
-    CCSprite *santy = (CCSprite *) sant->GetUserData();
-    
-    [santy stopAllActions]; // If you have actions running
-    [santy runAction:[CCSequence actions:
-                     animateAction, 
-                     [CCDelayTime actionWithDuration:delta],
-                     [CCCallFuncN actionWithTarget:self selector:@selector(startNRHit)],
-                     nil]];
-}
-
--(void)startNRHit {
-    [walkAnimFrames removeAllObjects];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate33.png"]];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate34.png"]];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate32.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate37.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate31.png"]];
-
-    CCAnimation *NRAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    id animateAction = [CCAnimate actionWithAnimation:NRAnim restoreOriginalFrame:NO];    
-    
-    
-    b2Body* newt = (b2Body*)[[acorns objectAtIndex:2] pointerValue];    
-    CCSprite *newty = (CCSprite *) newt->GetUserData();
-    
-    [newty stopAllActions]; // If you have actions running
-    [newty runAction:[CCSequence actions:
-                      animateAction, 
-                      [CCDelayTime actionWithDuration:delta],
-                      [CCCallFuncN actionWithTarget:self selector:@selector(startRMHit)],
-                      nil]];
-}
-
--(void)startRMHit {
-    [walkAnimFrames removeAllObjects];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate23.png"]];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate24.png"]];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate22.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate27.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate11.png"]];
-    CCAnimation *RMAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    id animateAction = [CCAnimate actionWithAnimation:RMAnim restoreOriginalFrame:NO];    
-    
-    
-    b2Body* ron = (b2Body*)[[acorns objectAtIndex:1] pointerValue];    
-    CCSprite *rony = (CCSprite *) ron->GetUserData();
-    
-    [rony stopAllActions]; // If you have actions running
-    [rony runAction:[CCSequence actions:
-                      animateAction, 
-                      [CCDelayTime actionWithDuration:delta],
-                      [CCCallFuncN actionWithTarget:self selector:@selector(startMHit)],
-                      nil]];
-    
-}
-
--(void)startMHit {
-    [walkAnimFrames removeAllObjects];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate17.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate11.png"]];
-    CCAnimation *MAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    id animateAction = [CCAnimate actionWithAnimation:MAnim restoreOriginalFrame:NO];    
-    
-    
-    b2Body* mitt = (b2Body*)[[acorns objectAtIndex:0] pointerValue];    
-    CCSprite *mitty = (CCSprite *) mitt->GetUserData();
-    
-    [mitty stopAllActions]; // If you have actions running
-   /* [mitty runAction:[CCSequence actions:
-                     animateAction, 
-                     [CCDelayTime actionWithDuration:delta],
-                     [CCCallFuncN actionWithTarget:self selector:@selector(startMHit)],
-                     nil]];
-    */
-    [mitty runAction:animateAction];
-}
-
--(void)MRHit {
-    // Lets say you have this as the CCAnimation for Sprite1
-    [walkAnimFrames removeAllObjects];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate14.png"]];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate15.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate17.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate11.png"]];
-    CCAnimation *MRAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    id animateAction = [CCAnimate actionWithAnimation:MRAnim restoreOriginalFrame:NO];    
-    
-    
-    b2Body* mitt = (b2Body*)[[acorns objectAtIndex:0] pointerValue];    
-    CCSprite *mitty = (CCSprite *) mitt->GetUserData();
-    
-    [mitty stopAllActions]; // If you have actions running
-    [mitty runAction:[CCSequence actions:
-                      animateAction, 
-                      [CCDelayTime actionWithDuration:delta],
-                      [CCCallFuncN actionWithTarget:self selector:@selector(startRNHit)],
-                      nil]];
-}
-
--(void)startRNHit {
-    [walkAnimFrames removeAllObjects];
-   // [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate34.png"]];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate35.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate26.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate21.png"]];
-    CCAnimation *RNAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    id animateAction = [CCAnimate actionWithAnimation:RNAnim restoreOriginalFrame:NO];    
-    
-    
-    b2Body* ron = (b2Body*)[[acorns objectAtIndex:1] pointerValue];    
-    CCSprite *rony = (CCSprite *) ron->GetUserData();
-    
-    [rony stopAllActions]; // If you have actions running
-    [rony runAction:[CCSequence actions:
-                      animateAction, 
-                      [CCDelayTime actionWithDuration:delta],
-                      [CCCallFuncN actionWithTarget:self selector:@selector(startNSHit)],
-                      nil]];
-}
-
--(void)startNSHit {
-    [walkAnimFrames removeAllObjects];
-    //[walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate24.png"]];
-   // [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate25.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate36.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate31.png"]];
-    CCAnimation *NSAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    id animateAction = [CCAnimate actionWithAnimation:NSAnim restoreOriginalFrame:NO];    
-    
-    
-    b2Body* newt = (b2Body*)[[acorns objectAtIndex:2] pointerValue];    
-    CCSprite *newty = (CCSprite *) newt->GetUserData();
-    
-    [newty stopAllActions]; // If you have actions running
-    [newty runAction:[CCSequence actions:
-                     animateAction, 
-                     [CCDelayTime actionWithDuration:delta],
-                     [CCCallFuncN actionWithTarget:self selector:@selector(startSHit)],
-                     nil]];
-    
-}
-
--(void)startSHit {
-    [walkAnimFrames removeAllObjects];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate46.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate41.png"]];
-    CCAnimation *SAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    id animateAction = [CCAnimate actionWithAnimation:SAnim restoreOriginalFrame:NO];    
-    
-    
-    b2Body* sant = (b2Body*)[[acorns objectAtIndex:3] pointerValue];    
-    CCSprite *santy = (CCSprite *) sant->GetUserData();
-    
-    [santy stopAllActions]; // If you have actions running
-  /*  [santy runAction:[CCSequence actions:
-                      animateAction, 
-                      [CCDelayTime actionWithDuration:delta],
-                      [CCCallFuncN actionWithTarget:self selector:@selector(resetEveryone)],
-                      nil]];
-    */
-    
-    [santy runAction:animateAction];
-    CCLOG(@"SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSsanty ran");
-}
-
--(void)resetEveryone {
-    
-    for (int i=0; i<4; i++) {
-        b2Body* sant = (b2Body*)[[acorns objectAtIndex:i] pointerValue];    
-        CCSprite *santy = [CCSprite spriteWithSpriteFrameName:@"candidate21.png"];
-        sant->SetUserData(santy);
-    }
-
-}
-- (CCAction*)createLeftHookAnim {
-    for (int i=3; i<6; i++) {
-        [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"candidate2%d.png", i]]];
-    }
-    
-    CCAnimation *walkAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    CCAnimate *blink = [CCAnimate actionWithDuration:2.25f animation:walkAnim restoreOriginalFrame:NO];
-    
-    //CCAction *walkAction = [CCRepeatForever actionWithAction:blink];
-    CCAction *walkAction = [CCRepeat actionWithAction:blink times:1];
-    
-    return walkAction;
-}
-
-
-- (CCAction*)createRightHookAnim {
-    [walkAnimFrames removeAllObjects];
-    
-    for (int i=3; i<6; i++) {
-        [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"candidate2%d.png", i]]];
-    }
-    
-    CCAnimation *walkAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    CCAnimate *blink = [CCAnimate actionWithDuration:2.25f animation:walkAnim restoreOriginalFrame:NO];
-    
-    //CCAction *walkAction = [CCRepeatForever actionWithAction:blink];
-    CCAction *walkAction = [CCRepeat actionWithAction:blink times:1];
-    
-    return walkAction;
-}
-- (CCAction*)createResetAnim {
-    [walkAnimFrames removeAllObjects];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate25.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate21.png"]];
-
-    CCAnimation *walkAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    CCAnimate *blink = [CCAnimate actionWithDuration:1.5f animation:walkAnim restoreOriginalFrame:NO];
-    
-    CCAction *walkAction = [CCRepeatForever actionWithAction:blink];
-    
-    return walkAction;
-}
-
-- (CCAction*)createBlinkAnim {
-    delta =0.2f;
-    [walkAnimFrames removeAllObjects];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate41.png"]];
-    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate47.png"]];
-
-    CCAnimation *SAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:delta];
-    
-    CCAnimate *blink = [CCAnimate actionWithAnimation:SAnim restoreOriginalFrame:YES];    
-    
-    CCAction *walkAction = [CCRepeat actionWithAction:blink times:1];
-
-    return walkAction;
 }
 
 - (void)reset {
@@ -549,11 +292,11 @@ enum {
     [[SimpleAudioEngine sharedEngine] setMute:muted];
     //NSLog(@"in mute Siund %d", muted);
     
-   /* 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:muted forKey:@"IsMuted"];
-    [defaults synchronize];
-    */
+    /* 
+     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+     [defaults setBool:muted forKey:@"IsMuted"];
+     [defaults synchronize];
+     */
 }
 
 -(void) draw
@@ -599,7 +342,7 @@ enum {
 			myActor.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
 		}	
 	}
-
+    
     // Loop through all of the box2d bodies that are currently colliding, that we have
     // gathered with our custom contact listener...
     std::vector<MyContact>::iterator pos2;
@@ -613,36 +356,13 @@ enum {
             CCSprite *spriteA = (CCSprite *) bodyA->GetUserData();
             CCSprite *spriteB = (CCSprite *) bodyB->GetUserData();
             
-            // Is sprite A a cat and sprite B a car? 
-            if ((spriteA.tag >= 10 && spriteB.tag >= 10) ){
-               if (abs(bodyA->GetLinearVelocity().x) > 1|| abs(bodyB->GetLinearVelocity().x) >1) 
-               {
-                   [spriteA runAction:[self createBlinkAnim]];
-                   [spriteB runAction:[self createBlinkAnim]];
-
-                   [MusicHandler playBounce];
+            if (spriteA.tag == 11 && spriteB.tag == 11) {
+                if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) [MusicHandler playBounce];
                 //NSLog(@"BodyA velocity vector %0.0f %0.0f", bodyA->GetLinearVelocity().x,bodyA->GetLinearVelocity().y );
-                //NSLog(@"BodyB velocity vector %0.0f %0.0f", bodyB->GetLinearVelocity().x,bodyB->GetLinearVelocity().y );
-                   /*
-                   if (spriteA.tag ==13 || spriteB.tag == 13) {
-                       if (bodyA->GetLinearVelocity().x < -1 || bodyB->GetLinearVelocity().x < -1) {
-                           predelta = (abs(bodyA->GetLinearVelocity().x) > abs(bodyB->GetLinearVelocity().x))? bodyA->GetLinearVelocity().x : bodyB->GetLinearVelocity().x;
-                           delta = 0.10f +(1/abs(predelta + 0.10f));
-                       [self SNHit];
-                       }
-                   }
-                   */
-          /*         if (spriteA.tag ==10 || spriteB.tag == 10) {
-                       predelta = (abs(bodyA->GetLinearVelocity().x) > abs(bodyB->GetLinearVelocity().x))? bodyA->GetLinearVelocity().x : bodyB->GetLinearVelocity().x;
-                       delta = 0.10f +(1/abs(predelta + 0.10f));
-                       if (bodyA->GetLinearVelocity().x > 1 || bodyB->GetLinearVelocity().x > 1) [self MRHit];
-                   }
-           */
-               }
-                
+               // NSLog(@"BodyB velocity vector %0.0f %0.0f", bodyB->GetLinearVelocity().x,bodyB->GetLinearVelocity().y );
             } 
         }  
-
+        
     }
 }
 
@@ -656,7 +376,10 @@ enum {
     b2Vec2 locationWorld = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
     
     bulletBody = (b2Body*)[[acorns objectAtIndex:0] pointerValue];
-    bulletBody2 = (b2Body*)[[acorns lastObject] pointerValue];    
+    bulletBody2 = (b2Body*)[[acorns lastObject] pointerValue];
+  	//CCLOG(@"Body2bulletBody2bulletBody2 %0.2f x %02.f",bulletBody2->GetWorldCenter().x , bulletBody2->GetWorldCenter().y);
+  	//CCLOG(@"11111111111111111111111 %0.2f x %02.f",bulletBody->GetWorldCenter().x , bulletBody->GetWorldCenter().y);
+    
     
     if (locationWorld.x > bulletBody2->GetWorldCenter().x - 50.0/PTM_RATIO)
     {
@@ -724,8 +447,6 @@ enum {
 // on "dealloc" you need to release all your retained objects
 - (void) dealloc
 {
-    
-    [walkAnimFrames release];
 	// in case you have something to dealloc, do it in this method
 	delete world;
 	world = NULL;
