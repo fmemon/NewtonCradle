@@ -134,7 +134,7 @@ enum {
         
         delta =0.75;
         //[self SNHit];
-        [self MRHit];
+        //[self MRHit];
         
         [self schedule: @selector(tick:)]; 
     }
@@ -163,9 +163,8 @@ enum {
     fd.restitution = 0.600000f;
     anchor->CreateFixture(&fd);
         
- /*   for (int i=0; i<4; i++) {
-        
-        //bodyDef.angularDamping = 1.0f;
+    
+    for (int i=0; i<4; i++) {
         
         //sticks
         CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick4.png"];
@@ -179,76 +178,7 @@ enum {
         initVel.Set(0.000000f, 0.000000f);
         stick->SetLinearVelocity(initVel);
         stick->SetAngularVelocity(0.000000f);
-        boxy.SetAsBox(0.03f,2.85f);
-        fd.shape = &boxy;        
-        fd.density = 1.0f;
-        fd.friction = 1.0f;
-        stick->CreateFixture(&fd);
-
-        bodyDef.type = b2_dynamicBody;
-        bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
-        acornSprite = [CCSprite spriteWithSpriteFrameName:@"candidate21.png"];
-        acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
-        //[self addChild:acornSprite z:1 tag:11];    
-        
-        if (i==0) {
-            [self addChild:acornSprite z:1 tag:10];
-        } else if (i==3) {
-            [self addChild:acornSprite z:1 tag:13];
-        } else {
-            [self addChild:acornSprite z:1 tag:11];
-        }
-        bodyDef.userData = acornSprite;
-        b2Body *acorn = world->CreateBody(&bodyDef);
-        [acorns addObject:[NSValue valueWithPointer:acorn]];
-        
-        
-        b2CircleShape dynamicBox;
-        dynamicBox.m_radius = 25.71/PTM_RATIO;
-        fixtureDef.shape = &dynamicBox;	
-        fixtureDef.friction = 1.0f;
-        fixtureDef.density = 10.0f;
-        fixtureDef.restitution = 1.0f;
-        
-        acorn->CreateFixture(&fixtureDef);
-
-        //Revolute joints
-        pos.Set(4.764226f+ (spacing*i), 9.3f);
-        revJointDef.Initialize(stick, anchor, pos);
-        revJointDef.collideConnected = false;
-        world->CreateJoint(&revJointDef);
-        
-        pos.Set(acorn->GetWorldCenter().x, acorn->GetWorldCenter().y);
-        
-        
-        revJointDef.Initialize(stick, acorn, pos);
-        revJointDef.collideConnected = false;
-        revJointDef.motorSpeed = 0.0f;
-        revJointDef.enableMotor = false;
-        revJointDef.maxMotorTorque = 5.0f;
-        world->CreateJoint(&revJointDef);
-        
-        
-        /*b2WeldJointDef weldJointDef;
-        weldJointDef.Initialize(stick, acorn, pos);
-        world->CreateJoint(&weldJointDef);
-        */
-    
-    for (int i=0; i<4; i++) {
-        
-        //sticks
-        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick3.png"];
-        sticksSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
-        [self addChild:sticksSprite z:-11 tag:11];
-        bodyDef.userData = sticksSprite;
-        bodyDef.type=b2_dynamicBody;
-        bodyDef.position.Set(4.7f+ (spacing*i), 6.5f);
-        bodyDef.angle = 0.000000f;
-        b2Body* stick = world->CreateBody(&bodyDef);
-        initVel.Set(0.000000f, 0.000000f);
-        stick->SetLinearVelocity(initVel);
-        stick->SetAngularVelocity(0.000000f);
-        boxy.SetAsBox(0.05f,2.85f);
+        boxy.SetAsBox(0.15f,2.85f);
         fd.shape = &boxy;        
         fd.density = 1.0f;
         fd.friction = 0.0f;
@@ -258,9 +188,17 @@ enum {
         bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
         
         
-        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate%i.png", i+1]];
+        acornSprite = [CCSprite spriteWithSpriteFrameName:@"candidate21.png"];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
-        [self addChild:acornSprite z:1 tag:11];
+        //[self addChild:acornSprite z:1 tag:11];
+        if (i==0) {
+            [self addChild:acornSprite z:1 tag:10];
+        } else if (i==3) {
+            [self addChild:acornSprite z:1 tag:13];
+        } else {
+            [self addChild:acornSprite z:1 tag:11];
+        }
+        
         bodyDef.userData = acornSprite;
         b2Body *acorn = world->CreateBody(&bodyDef);
         [acorns addObject:[NSValue valueWithPointer:acorn]];
@@ -281,15 +219,7 @@ enum {
         world->CreateJoint(&revJointDef);
         
         pos.Set(acorn->GetWorldCenter().x, acorn->GetWorldCenter().y);
-        
-        /*
-         revJointDef.Initialize(stick, acorn, pos);
-         revJointDef.collideConnected = false;
-         revJointDef.motorSpeed = 0.0f;
-         revJointDef.enableMotor = false;
-         revJointDef.maxMotorTorque = 5.0f;
-         world->CreateJoint(&revJointDef);
-         */
+
         
         b2WeldJointDef weldJointDef;
         weldJointDef.Initialize(stick, acorn, pos);
@@ -308,20 +238,20 @@ enum {
      tapLabel.color = ccBLUE;
      [self addChild: tapLabel];
      */
-    /*        CCSprite *sprite2 = [CCSprite spriteWithFile:@"bg.png"];
+            CCSprite *sprite2 = [CCSprite spriteWithFile:@"bg.png"];
      sprite2.anchorPoint = CGPointZero;
      [self addChild:sprite2 z:-11];
-     */      
-    CCMenuItem *restartItem = [CCMenuItemFont itemFromString:@"restart" target:self selector:@selector(reset)];
-    /*  CCMenuItemSprite* muteItem= [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
-     selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]
-     disabledSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]
+           
+    //CCMenuItem *restartItem = [CCMenuItemFont itemFromString:@"restart" target:self selector:@selector(reset)];
+    CCMenuItemSprite* restartItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"reset.png"]
+     selectedSprite:[CCSprite spriteWithFile:@"resetS.png"]
+     disabledSprite:[CCSprite spriteWithFile:@"resetS.png"]
      target:self
-     selector:@selector(turnOnMusic)];		
+     selector:@selector(reset)];		
      
      
      
-     CCMenu *menu = [CCMenu menuWithItems:muteItem, restartItem, nil]; */
+     /*CCMenu *menu = [CCMenu menuWithItems:muteItem, restartItem, nil]; */
     
     CCMenuItemSprite *playItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
                                                          selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]];
