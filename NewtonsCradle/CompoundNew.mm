@@ -133,8 +133,9 @@ enum {
 
 
 - (void) createEachPendulum2:(float)delta {
-        
-    spacing = 1.63f;
+      
+    spacing = 1.14f;
+    //spacing = 1.63f;
     //spacing = 1.83f;
     
     //top anchor
@@ -168,7 +169,7 @@ enum {
         initVel.Set(0.000000f, 0.000000f);
         stick->SetLinearVelocity(initVel);
         stick->SetAngularVelocity(0.000000f);
-        boxy.SetAsBox(0.05f,2.85f);
+        boxy.SetAsBox(0.15f,2.85f);
         fd.shape = &boxy;
         fd.density = 1.0f;
         fd.friction = 0.0f;
@@ -179,7 +180,7 @@ enum {
         bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
         
         //acorns
-        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateA%i.png", i+1]];
+        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate35%i.png", i+1]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
 
@@ -190,7 +191,8 @@ enum {
         bodyDef1.angularDamping = 0.01f;
         [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
-        dynamicBox.m_radius = 25.71/PTM_RATIO;
+        //dynamicBox.m_radius = 25.71/PTM_RATIO;
+        dynamicBox.m_radius = 18.0f/PTM_RATIO;
         fixtureDef.shape = &dynamicBox;	
         fixtureDef.friction = 1.0f;
         fixtureDef.density = 10.0f;
