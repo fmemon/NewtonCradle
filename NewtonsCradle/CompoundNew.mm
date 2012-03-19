@@ -138,8 +138,12 @@ enum {
     
     
     //top anchor
+    CCSprite *woodSprite = [CCSprite spriteWithFile:@"wood.png"];
+    woodSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
+    [self addChild:woodSprite z:1 tag:11];
+    bodyDef.userData = woodSprite;
     bodyDef.type = b2_staticBody;
-    bodyDef.position.Set(7.764226f, 360/PTM_RATIO *0.83f);
+    bodyDef.position.Set(7.0f, 360/PTM_RATIO *0.83f);
     bodyDef.type = b2_staticBody;
     bodyDef.angle = 0.000000f;
     b2Body* anchor = world->CreateBody(&bodyDef);
@@ -153,6 +157,10 @@ enum {
     for (int i=0; i<4; i++) {
         
         //sticks
+        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick3.png"];
+        sticksSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
+        [self addChild:sticksSprite z:-11 tag:11];
+        bodyDef.userData = sticksSprite;
         bodyDef.type=b2_dynamicBody;
         bodyDef.position.Set(4.7f+ (spacing*i), 6.5f);
         bodyDef.angle = 0.000000f;
@@ -164,14 +172,11 @@ enum {
         fd.shape = &boxy;        
         fd.density = 1.0f;
         fd.friction = 0.0f;
-        
         stick->CreateFixture(&fd);
         // Define the dynamic body.
         bodyDef.type = b2_dynamicBody;
         bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
-        
-        //acorns
-        //acornSprite = [CCSprite spriteWithFile:@"acorn.png"];
+
         
         acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate%i.png", i+1]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
@@ -197,13 +202,18 @@ enum {
         
         pos.Set(acorn->GetWorldCenter().x, acorn->GetWorldCenter().y);
         
+        /*
         revJointDef.Initialize(stick, acorn, pos);
         revJointDef.collideConnected = false;
         revJointDef.motorSpeed = 0.0f;
         revJointDef.enableMotor = false;
         revJointDef.maxMotorTorque = 5.0f;
         world->CreateJoint(&revJointDef);
+        */
         
+        b2WeldJointDef weldJointDef;
+        weldJointDef.Initialize(stick, acorn, pos);
+        world->CreateJoint(&weldJointDef);
         
         //menuitem
         CCLabelTTF* tapLabel = [CCLabelTTF labelWithString:@"All Rights Reserved 2012 BestWhich.com" fontName:@"Arial" fontSize:14];
