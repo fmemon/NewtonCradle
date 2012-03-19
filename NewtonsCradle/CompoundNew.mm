@@ -70,7 +70,8 @@ enum {
         // enable touches
         self.isTouchEnabled = YES; 
         
-        
+        walkAnimFrames = [[NSMutableArray alloc] initWithCapacity:7];
+
         muted = FALSE;
         spacing = 1.63f;
 
@@ -114,6 +115,11 @@ enum {
 		//Set up sprite
         acorns = [[NSMutableArray alloc] initWithCapacity:4];
 
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"newtscradle.plist"];
+        CCSpriteBatchNode*  spriteSheet = [CCSpriteBatchNode batchNodeWithFile:@"newtscradle.png"];
+        [self addChild:spriteSheet];
+
+        
         // Preload effect
         [MusicHandler preload];
         
@@ -134,9 +140,7 @@ enum {
 
 
 - (void) createEachPendulum2:(float)delta {
-    
-    
-    
+
     //top anchor
     CCSprite *woodSprite = [CCSprite spriteWithFile:@"wood.png"];
     woodSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
@@ -157,7 +161,7 @@ enum {
     for (int i=0; i<4; i++) {
         
         //sticks
-        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick3.png"];
+        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick4.png"];
         sticksSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:sticksSprite z:-11 tag:11];
         bodyDef.userData = sticksSprite;
@@ -168,7 +172,7 @@ enum {
         initVel.Set(0.000000f, 0.000000f);
         stick->SetLinearVelocity(initVel);
         stick->SetAngularVelocity(0.000000f);
-        boxy.SetAsBox(0.05f,2.85f);
+        boxy.SetAsBox(0.03f,2.85f);
         fd.shape = &boxy;        
         fd.density = 1.0f;
         fd.friction = 0.0f;
@@ -178,9 +182,11 @@ enum {
         bodyDef.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
 
         
-        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate%i.png", i+1]];
+        //acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate%i.png", i+1]];
+        acornSprite = [CCSprite spriteWithFile:@"candidate21.png"];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
+        //[acornSprite runAction:[self createRightHookAnim]];
         bodyDef.userData = acornSprite;
         b2Body *acorn = world->CreateBody(&bodyDef);
         [acorns addObject:[NSValue valueWithPointer:acorn]];
@@ -188,9 +194,9 @@ enum {
         //dynamicBox.m_radius = 18.0/PTM_RATIO;
         dynamicBox.m_radius = 25.71/PTM_RATIO;
         fixtureDef.shape = &dynamicBox;	
-        fixtureDef.friction = 1;
-        fixtureDef.density = 10;
-        fixtureDef.restitution = 1;
+        fixtureDef.friction = 1.0f;
+        fixtureDef.density = 10.0f;
+        fixtureDef.restitution = 1.0f;
         
         acorn->CreateFixture(&fixtureDef);
 
@@ -254,6 +260,81 @@ enum {
     }
 }
 
+- (CCAction*)createLeftHookAnim {
+    [walkAnimFrames removeAllObjects];
+    
+    for (int i=1; i<4; i++) {
+        [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"candidate2%d.png", i]]];
+    }
+    
+    CCAnimation *walkAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:0.75f];
+    
+    CCAnimate *blink = [CCAnimate actionWithDuration:2.25f animation:walkAnim restoreOriginalFrame:NO];
+    
+    CCAction *walkAction = [CCRepeatForever actionWithAction:blink];
+    
+    return walkAction;
+}
+
+
+- (CCAction*)createRightHookAnim {
+    [walkAnimFrames removeAllObjects];
+    
+    for (int i=3; i<6; i++) {
+        [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"candidate2%d.png", i]]];
+    }
+    
+    CCAnimation *walkAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:0.75f];
+    
+    CCAnimate *blink = [CCAnimate actionWithDuration:2.25f animation:walkAnim restoreOriginalFrame:NO];
+    
+    //CCAction *walkAction = [CCRepeatForever actionWithAction:blink];
+    CCAction *walkAction = [CCRepeat actionWithAction:blink times:1];
+    
+    return walkAction;
+}
+- (CCAction*)createResetAnim {
+    [walkAnimFrames removeAllObjects];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate25.png"]];
+    [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"candidate21.png"]];
+
+    CCAnimation *walkAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:0.75f];
+    
+    CCAnimate *blink = [CCAnimate actionWithDuration:1.5f animation:walkAnim restoreOriginalFrame:NO];
+    
+    CCAction *walkAction = [CCRepeatForever actionWithAction:blink];
+    
+    return walkAction;
+}
+
+- (CCAction*)createBlinkAnim {
+    [walkAnimFrames removeAllObjects];
+    
+    for (int i=1; i<6; i++) {
+        [walkAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"candidate2%d.png", i]]];
+    }
+    
+    CCAnimation *walkAnim = [CCAnimation animationWithFrames:walkAnimFrames delay:2.0f];
+    
+    CCAnimate *blink = [CCAnimate actionWithDuration:10.0f animation:walkAnim restoreOriginalFrame:YES];
+    
+    /*CCAction *walkAction = [CCRepeatForever actionWithAction:
+                            [CCSequence actions:
+                             [CCDelayTime actionWithDuration:CCRANDOM_0_1()*2.0f],
+                             blink,
+                             [CCDelayTime actionWithDuration:CCRANDOM_0_1()*3.0f],
+                             blink,
+                             [CCDelayTime actionWithDuration:CCRANDOM_0_1()*0.2f],
+                             blink,
+                             [CCDelayTime actionWithDuration:CCRANDOM_0_1()*2.0f],
+                             nil]
+                            ];
+    */
+    
+    CCAction *walkAction = [CCRepeatForever actionWithAction:blink];
+
+    return walkAction;
+}
 
 - (void)reset {
     for (int i=0; i<4; i++) {
@@ -345,7 +426,9 @@ enum {
             
             // Is sprite A a cat and sprite B a car? 
             if (spriteA.tag == 11 && spriteB.tag == 11) {
-                //[MusicHandler playBounce];
+               if (abs(bodyA->GetLinearVelocity().x) > 3 || abs(bodyB->GetLinearVelocity().x) > 3) [MusicHandler playBounce];
+                NSLog(@"BodyA velocity vector %0.0f %0.0f", bodyA->GetLinearVelocity().x,bodyA->GetLinearVelocity().y );
+                NSLog(@"BodyB velocity vector %0.0f %0.0f", bodyB->GetLinearVelocity().x,bodyB->GetLinearVelocity().y );
             } 
         }  
 
@@ -433,6 +516,8 @@ enum {
 // on "dealloc" you need to release all your retained objects
 - (void) dealloc
 {
+    
+    [walkAnimFrames release];
 	// in case you have something to dealloc, do it in this method
 	delete world;
 	world = NULL;

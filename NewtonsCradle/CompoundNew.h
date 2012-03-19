@@ -47,6 +47,8 @@
     
     BOOL muted;
     float spacing;
+    
+    NSMutableArray *walkAnimFrames;
 }
 
 // returns a CCScene that contains the CompoundNew as the only child
@@ -55,6 +57,9 @@
 - (void) createEachPendulum2:(float)delta;
 - (void)reset;
 - (void)turnOnMusic;
-
+- (CCAction*)createBlinkAnim;
+- (CCAction*)createLeftHookAnim;
+- (CCAction*)createRightHookAnim;
+- (CCAction*)createResetAnim;
 
 @end
