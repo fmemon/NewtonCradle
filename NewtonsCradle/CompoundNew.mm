@@ -134,8 +134,8 @@ enum {
 
 - (void) createEachPendulum2:(float)delta {
       
-    spacing = 1.14f;
-    //spacing = 1.63f;
+    //spacing = 1.14f;
+    spacing = 1.63f;
     //spacing = 1.83f;
     
     //top anchor
@@ -158,7 +158,7 @@ enum {
     for (int i=0; i<4; i++) {
         
         //sticks
-        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick4.png"];
+        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick5.png"];
         sticksSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:sticksSprite z:-11 tag:11];
         bodyDef.userData = sticksSprite;
@@ -177,10 +177,11 @@ enum {
         
         // acorns
         bodyDef1.type = b2_dynamicBody;
-        bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.85f);
+        bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.3f);
         
         //acorns
-        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidate35%i.png", i+1]];
+        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateF%i.png", i+1]];
+        //acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"acorn.png"]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
 
@@ -191,15 +192,23 @@ enum {
         bodyDef1.angularDamping = 0.01f;
         [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
-        //dynamicBox.m_radius = 25.71/PTM_RATIO;
-        dynamicBox.m_radius = 18.0f/PTM_RATIO;
+        dynamicBox.m_radius = 25.71/PTM_RATIO;
+        //dynamicBox.m_radius = 18.0f/PTM_RATIO;
         fixtureDef.shape = &dynamicBox;	
         fixtureDef.friction = 1.0f;
         fixtureDef.density = 10.0f;
         fixtureDef.restitution = 1.0f;
         //acorn->SetAngularVelocity(5.000000f); //makes heads spin initially
-
+         
         acorn->CreateFixture(&fixtureDef);
+
+        //setting the mass
+        b2MassData mdA;
+        acorn->GetMassData( &mdA );
+        //mdA.mass = 9.94f; //for acorns at 18.0, 1.14
+        mdA.mass = 14.2f;
+        mdA.center.Set(0,0);
+        //acorn->SetMassData( &mdA );
         
         //Revolute joints
         pos.Set(4.764226f+ (spacing*i), 9.3f);
@@ -322,23 +331,29 @@ enum {
         // Get the box2d bodies for each object
         b2Body *bodyA = contact.fixtureA->GetBody();
         b2Body *bodyB = contact.fixtureB->GetBody();
+
+        float mA = bodyA->GetMass();
+        float mB = bodyB->GetMass();
+        
         if (bodyA->GetUserData() != NULL && bodyB->GetUserData() != NULL) {
             CCSprite *spriteA = (CCSprite *) bodyA->GetUserData();
             CCSprite *spriteB = (CCSprite *) bodyB->GetUserData();
-            
+
             //spriteA.color = ccMAGENTA;
             //spriteB.color = ccMAGENTA;
             
             if (spriteA.tag == 11 && spriteB.tag == 11) {
                 if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) {
-                    //bodyA->ApplyAngularImpulse( 15.0f );
-                    //bodyB->ApplyAngularImpulse( 15.0f );  
+                  //  bodyA->ApplyAngularImpulse( 15.0f );
+                   // bodyB->ApplyAngularImpulse( 15.0f );  
                     
-                /*    angimp = bodyA->GetInertia() * radDiff( 5.0f, bodyA->GetAngle() );
+                 /*   angimp = bodyA->GetInertia() * radDiff( 5.0f, bodyA->GetAngle() );
                     bodyA->ApplyAngularImpulse( angimp );
                     angimp = bodyB->GetInertia() * radDiff( 5.0f, bodyB->GetAngle() );
                     bodyB->ApplyAngularImpulse( angimp );
                  */
+                    
+                    CCLOG(@"mass of each %f and %f", mA, mB);
                 [MusicHandler playBounce];
                 }
             } 
