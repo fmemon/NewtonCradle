@@ -151,7 +151,8 @@ static inline float radDiff( float a, float b )
     for (int i=0; i<4; i++) {
         
         //sticks
-        CCSprite *sticksSprite = [CCSprite spriteWithSpriteFrameName:@"stick5.png"];
+        //CCSprite *sticksSprite = [CCSprite spriteWithSpriteFrameName:@"stick5.png"];
+        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick6.png"];
         sticksSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:sticksSprite z:-11 tag:11];
         bodyDef.userData = sticksSprite;
@@ -162,7 +163,8 @@ static inline float radDiff( float a, float b )
         initVel.Set(0.000000f, 0.000000f);
         stick->SetLinearVelocity(initVel);
         stick->SetAngularVelocity(0.000000f);
-        boxy.SetAsBox(0.15f,2.85f);
+        //boxy.SetAsBox(0.15f,2.85f);
+        boxy.SetAsBox(0.15f,3.25f);
         fd.shape = &boxy;
         fd.density = 1.0f;
         fd.friction = 0.0f;
@@ -170,7 +172,8 @@ static inline float radDiff( float a, float b )
         
         // acorns
         bodyDef1.type = b2_dynamicBody;
-        bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.3f);
+        //bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.3f);
+        bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -3.5f);
         acornSprite = [CCSprite spriteWithSpriteFrameName:[NSString stringWithFormat:@"candidateG%i.png", i+1]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
