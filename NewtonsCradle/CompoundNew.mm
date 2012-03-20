@@ -180,7 +180,7 @@ enum {
         bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.3f);
         
         //acorns
-        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateF%i.png", i+1]];
+        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateG%i.png", i+1]];
         //acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"acorn.png"]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
