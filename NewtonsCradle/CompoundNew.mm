@@ -139,7 +139,7 @@ enum {
     //spacing = 1.83f;
     
     //top anchor
-    CCSprite *woodSprite = [CCSprite spriteWithFile:@"wood.png"];
+    CCSprite *woodSprite = [CCSprite spriteWithFile:@"woodred.png"];
     woodSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
     [self addChild:woodSprite z:1 tag:11];
     bodyDef.userData = woodSprite;
