@@ -139,7 +139,7 @@ enum {
     //spacing = 1.83f;
     
     //top anchor
-    CCSprite *woodSprite = [CCSprite spriteWithFile:@"woodred.png"];
+    CCSprite *woodSprite = [CCSprite spriteWithSpriteFrameName:@"woodred.png"];
     woodSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
     [self addChild:woodSprite z:1 tag:11];
     bodyDef.userData = woodSprite;
@@ -158,7 +158,7 @@ enum {
     for (int i=0; i<4; i++) {
         
         //sticks
-        CCSprite *sticksSprite = [CCSprite spriteWithFile:@"stick5.png"];
+        CCSprite *sticksSprite = [CCSprite spriteWithSpriteFrameName:@"stick5.png"];
         sticksSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:sticksSprite z:-11 tag:11];
         bodyDef.userData = sticksSprite;
@@ -180,7 +180,7 @@ enum {
         bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.3f);
         
         //acorns
-        acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateG%i.png", i+1]];
+        acornSprite = [CCSprite spriteWithSpriteFrameName:[NSString stringWithFormat:@"candidateG%i.png", i+1]];
         //acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"acorn.png"]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
@@ -353,7 +353,7 @@ enum {
                     bodyB->ApplyAngularImpulse( angimp );
                  */
                     
-                    CCLOG(@"mass of each %f and %f", mA, mB);
+                   // CCLOG(@"mass of each %f and %f", mA, mB);
                 [MusicHandler playBounce];
                 }
             } 
