@@ -35,13 +35,6 @@ static inline float radDiff( float a, float b )
     return atan2( sin(a-b), cos(a-b) );
 }
 
-// enums that will be used as tags
-enum {
-	kTagTileMap = 1,
-	kTagBatchNode = 1,
-	kTagAnimation1 = 1,
-};
-
 
 // CompoundNew implementation
 @implementation CompoundNew
@@ -178,17 +171,12 @@ enum {
         // acorns
         bodyDef1.type = b2_dynamicBody;
         bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.3f);
-        
-        //acorns
         acornSprite = [CCSprite spriteWithSpriteFrameName:[NSString stringWithFormat:@"candidateG%i.png", i+1]];
-        //acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"acorn.png"]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
 
         bodyDef1.userData = acornSprite;
         b2Body *acorn = world->CreateBody(&bodyDef1);
-        //Slows the rotation down
-        //bodyDef1.linearDamping = 0.01f; //really slows everything down
         bodyDef1.angularDamping = 0.01f;
         [acorns addObject:[NSValue valueWithPointer:acorn]];
         b2CircleShape dynamicBox;
@@ -198,7 +186,6 @@ enum {
         fixtureDef.friction = 1.0f;
         fixtureDef.density = 10.0f;
         fixtureDef.restitution = 1.0f;
-        //acorn->SetAngularVelocity(5.000000f); //makes heads spin initially
          
         acorn->CreateFixture(&fixtureDef);
 
@@ -208,7 +195,6 @@ enum {
         //mdA.mass = 9.94f; //for acorns at 18.0, 1.14
         mdA.mass = 14.2f;
         mdA.center.Set(0,0);
-        //acorn->SetMassData( &mdA );
         
         //Revolute joints
         pos.Set(4.764226f+ (spacing*i), 9.3f);
@@ -331,16 +317,10 @@ enum {
         // Get the box2d bodies for each object
         b2Body *bodyA = contact.fixtureA->GetBody();
         b2Body *bodyB = contact.fixtureB->GetBody();
-
-        float mA = bodyA->GetMass();
-        float mB = bodyB->GetMass();
         
         if (bodyA->GetUserData() != NULL && bodyB->GetUserData() != NULL) {
             CCSprite *spriteA = (CCSprite *) bodyA->GetUserData();
             CCSprite *spriteB = (CCSprite *) bodyB->GetUserData();
-
-            //spriteA.color = ccMAGENTA;
-            //spriteB.color = ccMAGENTA;
             
             if (spriteA.tag == 11 && spriteB.tag == 11) {
                 if (abs(bodyA->GetLinearVelocity().x) > 1 || abs(bodyB->GetLinearVelocity().x) > 1) {
@@ -438,6 +418,8 @@ enum {
 // on "dealloc" you need to release all your retained objects
 - (void) dealloc
 {
+    [acorns release];
+    
 	// in case you have something to dealloc, do it in this method
 	delete world;
 	world = NULL;

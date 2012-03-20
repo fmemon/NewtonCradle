@@ -34,7 +34,6 @@
     b2PolygonShape boxy;
 
     NSMutableArray *acorns;
-    NSMutableArray *sticks;
     
     b2MouseJoint *mouseJoint;
 	b2Body* bulletBody;
@@ -49,10 +48,9 @@
     BOOL muted;
     float spacing;
     float delta;
-    float predelta;
-    float angimp;
+    //float predelta;
+    //float angimp;
     
-    NSMutableArray *walkAnimFrames;
 }
 
 // returns a CCScene that contains the CompoundNew as the only child
