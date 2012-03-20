@@ -175,6 +175,7 @@ static inline float radDiff( float a, float b )
         //bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -2.3f);
         bodyDef1.position.Set(stick->GetWorldCenter().x, stick->GetWorldCenter().y -3.5f);
         acornSprite = [CCSprite spriteWithSpriteFrameName:[NSString stringWithFormat:@"candidateG%i.png", i+1]];
+        //acornSprite = [CCSprite spriteWithFile:[NSString stringWithFormat:@"candidateG%i.png", i+1]];
         acornSprite.position = ccp(480.0f/2, 50/PTM_RATIO);
         [self addChild:acornSprite z:1 tag:11];
 
@@ -192,13 +193,13 @@ static inline float radDiff( float a, float b )
          
         acorn->CreateFixture(&fixtureDef);
 
-        //setting the mass
+  /*      //setting the mass
         b2MassData mdA;
         acorn->GetMassData( &mdA );
         //mdA.mass = 9.94f; //for acorns at 18.0, 1.14
         mdA.mass = 14.2f;
         mdA.center.Set(0,0);
-        
+    */    
         //Revolute joints
         pos.Set(4.764226f+ (spacing*i), 9.3f);
         revJointDef.Initialize(stick, anchor, pos);
