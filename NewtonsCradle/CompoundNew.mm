@@ -236,7 +236,7 @@ enum {
                                                             disabledSprite:[CCSprite spriteWithFile:@"resetS.png"]
                                                                     target:self
                                                                   selector:@selector(reset)];		    
-        
+   
     CCMenuItemSprite *playItem = [CCMenuItemSprite itemFromNormalSprite:[CCSprite spriteWithFile:@"newPauseON.png"]
                                                          selectedSprite:[CCSprite spriteWithFile:@"newPauseONSelect.png"]];
     
@@ -253,8 +253,8 @@ enum {
     //Create Menu with the items created before
     CCMenu *menu = [CCMenu menuWithItems:pause,restartItem, nil];
     [self addChild:menu z:11];
-    [menu alignItemsHorizontally];
-    [menu setPosition:ccp(90.0f, 35.0f)];
+    [menu alignItemsHorizontallyWithPadding:370.0f];
+    [menu setPosition:ccp(230.0f, 295.0f)];
 }
 
 - (void)reset {
