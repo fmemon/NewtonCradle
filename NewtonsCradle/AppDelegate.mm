@@ -10,11 +10,8 @@
 
 #import "AppDelegate.h"
 #import "GameConfig.h"
-#import "HelloWorldLayer.h"
 #import "RootViewController.h"
 #import "CompoundNew.h"
-#import "Squirrel.h"
-#import "CompoundBody.h"
 
 @implementation AppDelegate
 
